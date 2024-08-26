@@ -45,9 +45,10 @@
           <div class="modal-body">
             <slot name="body">
               <div class="w-full">
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
-                  <div class="sm:col-span-2">
+                <div class="mt-10 grid grid-cols-12 gap-x-6 gap-y-8">
+                  <div class="col-span-2">
                     <input
+                      class="w-full"
                       type="text"
                       maxlength="2"
                       pattern="[0-9]*"
@@ -56,11 +57,12 @@
                       ref="lockedCode1Field"
                     />
                   </div>
-                  <div class="sm:col-span-2">
+                  <div class="col-span-2">
                     &nbsp;/&nbsp;
                   </div>
-                  <div class="sm:col-span-2">
+                  <div class="col-span-2">
                     <input
+                      class="w-full"
                       type="text"
                       maxlength="2"
                       pattern="[0-9]*"
@@ -69,11 +71,12 @@
                       ref="lockedCode2Field"
                     />
                   </div>
-                  <div class="sm:col-span-2">
+                  <div class="col-span-2">
                     &nbsp;/&nbsp;
                   </div>
-                  <div class="sm:col-span-4">
+                  <div class="col-span-4">
                     <input
+                      class="w-full"
                       type="text"
                       maxlength="4"
                       pattern="[0-9]*"
@@ -649,14 +652,28 @@ body {
   align-items: center;
   z-index: 1000;
 }
+
 .modal-container {
   width: 300px;
 }
+
+@media only screen and (max-width: 600px) {
+  .modal-container-large {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .modal-container-large {
+    width: 75%;
+  }
+}
+
 .modal-container-large {
-  width: 75%;
   position: absolute;
   z-index: 1000;
 }
+
 /*
 .modal-container.over,
 .modal-container-large.over {
