@@ -187,23 +187,21 @@
       </div>
     </div>
   </Transition>
-  <div v-if="loaded">
-    <div class="container" ref="container">
-      <ImageMapper
-        :src="src"
-        :map="map"
-        :width="parentWidth"
-        :imgWidth="2500"
-        :parentWidth="parentWidth"
-        :responsive="true"
-        @click="handleImageMapClick"
-      />
-    </div>
+  <div class="mapper-container" ref="container" v-if="loaded">
+    <ImageMapper
+      :src="src"
+      :map="map"
+      :width="parentWidth"
+      :imgWidth="2500"
+      :parentWidth="parentWidth"
+      :responsive="true"
+      @click="handleImageMapClick"
+    />
   </div>
 </template>
 
 <script>
-import { computed, defineComponent, ref, shallowReactive, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, shallowReactive, watch } from "vue";
 import Carousel from "primevue/carousel";
 import { VueFlip } from "vue-flip";
 import { useSound } from "@vueuse/sound";
@@ -282,9 +280,13 @@ export default defineComponent({
       areas: areasData.value,
     }));
     const container = ref(null);
-    const parentWidth = computed(() => {
-      return container.value ? container.value.clientWidth : 800;
+    onMounted(() => {
+      window.addEventListener('resize', handleResize);
     });
+    const parentWidth = ref(800);
+    const handleResize = () => {
+      parentWidth.value = container.value.clientWidth;
+    };
     let backgroundMusicArgs = useSound(backgroundMusic);
     let pianoAudioArgs = useSound(pianoAudio);
     let proposalAudioArgs = useSound(proposalAudio);
@@ -383,6 +385,7 @@ export default defineComponent({
       setTimeout(() => {
         areasData.value = areas;
         sounds.backgroundMusic.play();
+        handleResize();
       }, 50);
     };
 
@@ -419,7 +422,9 @@ export default defineComponent({
       if (lockedCode === "04/15/2015") {
         let phone = "";
         let address = "";
-        let dateTime = "";
+        let uri = window.location.search.substring(1); 
+        let params = new URLSearchParams(uri);
+        let dateTime = params.d ?? "";
         showLockedDrawerDialog.value = false;
         textDialog.value = `&#8220;Emily,<br>
         <br>
@@ -455,7 +460,9 @@ export default defineComponent({
           break;
         case "40":
           if (!soundPlaying) {
+            console.log("Playing audio");
             soundPlaying = sounds.pianoAudio;
+            soundPlaying.sound.value.fade(0, 1, 0);
             sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
               sounds.backgroundMusic.stop();
@@ -467,6 +474,7 @@ export default defineComponent({
               soundPlaying.stop();
               sounds.backgroundMusic.sound.value.fade(0, 1, 0);
               sounds.backgroundMusic.play();
+              soundPlaying = null;
             }, 1000);
           }
           break;
@@ -527,6 +535,7 @@ export default defineComponent({
         case "14":
           if (!soundPlaying) {
             soundPlaying = sounds.proposalAudio;
+            soundPlaying.sound.value.fade(0, 1, 0);
             sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
               sounds.backgroundMusic.stop();
@@ -538,6 +547,7 @@ export default defineComponent({
               soundPlaying.stop();
               sounds.backgroundMusic.sound.value.fade(0, 1, 0);
               sounds.backgroundMusic.play();
+              soundPlaying = null;
             }, 1000);
           }
           break;
@@ -553,6 +563,7 @@ export default defineComponent({
         case "20":
           if (!soundPlaying) {
             soundPlaying = sounds.voicemailAudio;
+            soundPlaying.sound.value.fade(0, 1, 0);
             sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
               sounds.backgroundMusic.stop();
@@ -564,6 +575,7 @@ export default defineComponent({
               soundPlaying.stop();
               sounds.backgroundMusic.sound.value.fade(0, 1, 0);
               sounds.backgroundMusic.play();
+              soundPlaying = null;
             }, 1000);
           }
           break;
@@ -612,6 +624,9 @@ export default defineComponent({
 </script>
 
 <style>
+body {
+  color: black;
+}
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -694,7 +709,7 @@ export default defineComponent({
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
-.container {
+.mapper-container {
   width: 100%;
 }
 .mx-auto {
