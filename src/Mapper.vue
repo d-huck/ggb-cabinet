@@ -6,7 +6,7 @@
           <slot name="header">Welcome</slot>
         </div>
         <div class="modal-body">
-          <slot name="body">Body of modal dialog</slot>
+          <slot name="body">Desktop use and headphones are strongly recommended. Please ensure your volume is turned up.</slot>
         </div>
         <div class="modal-footer">
           <slot name="footer">
@@ -21,7 +21,7 @@
   </Transition>
   <Transition name="modal">
     <div v-if="textDialog">
-      <div class="modal-wrapper">
+      <div class="modal-wrapper modal-dim">
         <div class="modal-container-large over">
           <div class="modal-body">
             <slot name="body"><div v-html="textDialog"></div></slot>
@@ -40,53 +40,16 @@
   </Transition>
   <Transition name="modal">
     <div v-if="showLockedDrawerDialog">
-      <div class="modal-wrapper">
+      <div class="modal-wrapper modal-dim">
         <div class="modal-container-large over">
+          <div class="modal-header">
+            <slot name="header">Our Wedding Anniversary</slot>
+          </div>
           <div class="modal-body">
             <slot name="body">
-              <div class="w-full">
-                <div class="mt-10 grid grid-cols-12 gap-x-6 gap-y-8">
-                  <div class="col-span-2">
-                    <input
-                      class="w-full"
-                      type="text"
-                      maxlength="2"
-                      pattern="[0-9]*"
-                      inputmode="numeric"
-                      v-model="lockedCode1"
-                      ref="lockedCode1Field"
-                    />
-                  </div>
-                  <div class="col-span-2">
-                    &nbsp;/&nbsp;
-                  </div>
-                  <div class="col-span-2">
-                    <input
-                      class="w-full"
-                      type="text"
-                      maxlength="2"
-                      pattern="[0-9]*"
-                      inputmode="numeric"
-                      v-model="lockedCode2"
-                      ref="lockedCode2Field"
-                    />
-                  </div>
-                  <div class="col-span-2">
-                    &nbsp;/&nbsp;
-                  </div>
-                  <div class="col-span-4">
-                    <input
-                      class="w-full"
-                      type="text"
-                      maxlength="4"
-                      pattern="[0-9]*"
-                      inputmode="numeric"
-                      v-model="lockedCode3"
-                      ref="lockedCode3Field"
-                    />
-                  </div>
-                </div> <!-- class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12" -->
-              </div> <!-- class="w-full" -->
+              <div class="w-full text-center">
+                <InputMask v-model="lockedCode" class="w-50 text-center" placeholder="99/99/9999" mask="99/99/9999" slotChar="__/__/____" />
+              </div>
             </slot>
           </div>
           <div class="modal-footer">
@@ -102,7 +65,7 @@
     </div>
   </Transition>
   <Transition name="modal-flipbook">
-    <div v-if="flipbookDisplay" class="modal-wrapper">
+    <div v-if="flipbookDisplay" class="modal-wrapper modal-dim">
       <div class="modal-container-large">
         <div class="modal-body">
           <slot name="body">
@@ -115,7 +78,7 @@
                 >
                     <template #item="slotProps">
                         <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
-                            <div class="relative mx-auto">
+                            <div class="relative mx-auto cursor-pointer">
                                 <vue-flip active-click width="100%" height="400px" transition="1.0s">
                                   <template v-slot:front>
                                     <div class="w-full relative mx-auto">
@@ -147,13 +110,13 @@
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="imageDisplay" class="modal-wrapper">
+    <div v-if="imageDisplay" class="modal-wrapper modal-dim">
       <div class="modal-container-large">
         <div class="modal-body">
           <slot name="body">
             <div class="card">
               <div class="w-full relative mx-auto">
-                <img :src="imageDisplay" class="h-400 rounded mx-auto" />
+                <img :src="imageDisplay" class="h-tall rounded mx-auto" />
               </div>
             </div>
           </slot>
@@ -170,7 +133,7 @@
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="videoDisplay" class="modal-wrapper">
+    <div v-if="videoDisplay" class="modal-wrapper modal-dim">
       <div class="modal-container-large">
         <div class="modal-body">
           <slot name="body">
@@ -204,8 +167,9 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, ref, shallowReactive, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, shallowReactive } from "vue";
 import Carousel from "primevue/carousel";
+import InputMask  from "primevue/inputmask";
 import { VueFlip } from "vue-flip";
 import { useSound } from "@vueuse/sound";
 import ImageMapper from "@/components/ImageMapper/ImageMapper.vue";
@@ -269,6 +233,7 @@ export default defineComponent({
   components: {
     Carousel,
     ImageMapper,
+    InputMask,
     VideoPlayer,
     'vue-flip': VueFlip
   },
@@ -290,7 +255,7 @@ export default defineComponent({
     const handleResize = () => {
       parentWidth.value = container.value.clientWidth;
     };
-    let backgroundMusicArgs = useSound(backgroundMusic);
+    let backgroundMusicArgs = useSound(backgroundMusic, { html5: true, loop: true });
     let pianoAudioArgs = useSound(pianoAudio);
     let proposalAudioArgs = useSound(proposalAudio);
     let voicemailAudioArgs = useSound(voicemailAudio);
@@ -307,6 +272,7 @@ export default defineComponent({
     const sounds = {
       backgroundMusic: {
         play: backgroundMusicArgs.play,
+        pause: backgroundMusicArgs.pause,
         stop: backgroundMusicArgs.stop,
         sound: backgroundMusicArgs.sound
       },
@@ -343,22 +309,48 @@ export default defineComponent({
     const videoDisplay = ref(null);
     const videoOptions = ref({});
     const showLockedDrawerDialog = ref(false);
-    const lockedCode1 = ref("");
-    const lockedCode2 = ref("");
-    const lockedCode3 = ref("");
+    const lockedCode = ref("");
+    /*
+    const lockedCode1 = ref("__");
+    const lockedCode2 = ref("__");
+    const lockedCode3 = ref("____");
     const lockedCode1Field = ref(null);
     const lockedCode2Field = ref(null);
     const lockedCode3Field = ref(null);
-    watch(lockedCode1, (newValue) => {
-      if (lockedCode1.value.length === 2) {
+    const lockedCode1Change = (e) => {
+      let newValue = lockedCode1.value.replace("_", "");
+      while (newValue.length < 2) {
+        newValue = newValue + "_";
+      }
+      if (newValue !== lockedCode1.value) {
+        lockedCode1.value = newValue;
+      }
+      if (lockedCode1.value.replace("_", "").length === 2) {
         lockedCode2Field.value.focus();
       }
-    });
-    watch(lockedCode2, (newValue) => {
-      if (lockedCode2.value.length === 2) {
+    };
+    const lockedCode2Change = (e) => {
+      let newValue = lockedCode2.value.replace("_", "");
+      while (newValue.length < 2) {
+        newValue = newValue + "_";
+      }
+      if (newValue !== lockedCode2.value) {
+        lockedCode2.value = newValue;
+      }
+      if (lockedCode2.value.replace("_", "").length === 2) {
         lockedCode3Field.value.focus();
       }
-    });
+    };
+    const lockedCode3Change = (e) => {
+      let newValue = lockedCode3.value.replace("_", "");
+      while (newValue.length < 4) {
+        newValue = newValue + "_";
+      }
+      if (newValue !== lockedCode3.value) {
+        lockedCode3.value = newValue;
+      }
+    };
+    */
     let soundPlaying = null;
     const postcards = [{
       front: postcard1Front,
@@ -411,18 +403,22 @@ export default defineComponent({
     };
 
     const closeVideo = () => {
-      console.log("Closing video");
       let choice = Math.floor(Math.random()*sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       videoDisplay.value = null;
       videoOptions.value = {};
-      sounds.backgroundMusic.sound.value.fade(0, 1, 0);
+      sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
       sounds.backgroundMusic.play();
     };
 
     const submitCode = () => {
-      let lockedCode = lockedCode1.value + "/" + lockedCode2.value + "/" + lockedCode3.value;
-      if (lockedCode === "04/15/2015") {
+      //let lockedCode = lockedCode1.value + "/" + lockedCode2.value + "/" + lockedCode3.value;
+      if (
+        (lockedCode.value === "04/15/2015") ||
+        (lockedCode.value === "4/15/2015") ||
+        (lockedCode.value === "04/15/15") ||
+        (lockedCode.value === "4/15/15")
+      ) {
         let phone = "";
         let address = "";
         let uri = window.location.search.substring(1); 
@@ -468,14 +464,14 @@ export default defineComponent({
             soundPlaying.sound.value.fade(0, 1, 0);
             sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
-              sounds.backgroundMusic.stop();
+              sounds.backgroundMusic.pause();
               soundPlaying.play();
             }, 1000);
           } else {
             soundPlaying.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
               soundPlaying.stop();
-              sounds.backgroundMusic.sound.value.fade(0, 1, 0);
+              sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
               sounds.backgroundMusic.play();
               soundPlaying = null;
             }, 1000);
@@ -492,7 +488,7 @@ export default defineComponent({
         case "6":
           sounds.backgroundMusic.sound.value.fade(1, 0, 500);
           setTimeout(() => {
-            sounds.backgroundMusic.stop();
+            sounds.backgroundMusic.pause();
           }, 500);
           videoDisplay.value = phoneVideo;
           videoOptions.value = {
@@ -517,12 +513,15 @@ export default defineComponent({
           break;
         case "10":
           showLockedDrawerDialog.value = true;
-          lockedCode1.value = "";
-          lockedCode2.value = "";
-          lockedCode3.value = "";
+          lockedCode.value = "";
+          /*
+          lockedCode1.value = "__";
+          lockedCode2.value = "__";
+          lockedCode3.value = "____";
           setTimeout(() => {
             lockedCode1Field.value.focus();
           }, 50);
+          */
           break;
         case "11":
           textDialog.value = `Jen found a nest of baby rabbits. She knew to leave them alone under normal circumstances, but their mother never returned. The nearest wild rehabilitation was already at capacity, so she bottle fed them every two hours for eight days, only taking breaks when I could relieve her for a nap. We lost one of them, but the others managed to survive long enough to feed themselves. She built them a rabbit hutch in the backyard and frequently brought them inside to play. She cared for them for over a year.<br>
@@ -541,14 +540,14 @@ export default defineComponent({
             soundPlaying.sound.value.fade(0, 1, 0);
             sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
-              sounds.backgroundMusic.stop();
+              sounds.backgroundMusic.pause();
               soundPlaying.play();
             }, 1000);
           } else {
             soundPlaying.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
               soundPlaying.stop();
-              sounds.backgroundMusic.sound.value.fade(0, 1, 0);
+              sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
               sounds.backgroundMusic.play();
               soundPlaying = null;
             }, 1000);
@@ -569,14 +568,14 @@ export default defineComponent({
             soundPlaying.sound.value.fade(0, 1, 0);
             sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
-              sounds.backgroundMusic.stop();
+              sounds.backgroundMusic.pause();
               soundPlaying.play();
             }, 1000);
           } else {
             soundPlaying.sound.value.fade(1, 0, 1000);
             setTimeout(() => {
               soundPlaying.stop();
-              sounds.backgroundMusic.sound.value.fade(0, 1, 0);
+              sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
               sounds.backgroundMusic.play();
               soundPlaying = null;
             }, 1000);
@@ -614,12 +613,18 @@ export default defineComponent({
       videoOptions,
       showLockedDrawerDialog,
       submitCode,
+      lockedCode,
+      /*
       lockedCode1,
       lockedCode2,
       lockedCode3,
       lockedCode1Field,
       lockedCode2Field,
       lockedCode3Field,
+      lockedCode1Change,
+      lockedCode2Change,
+      lockedCode3Change,
+      */
       handleImageMapClick,
     };
   }
@@ -652,6 +657,10 @@ body {
   align-items: center;
   z-index: 1000;
 }
+.modal-dim {
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: opacity 0.3s ease;
+}
 
 .modal-container {
   width: 300px;
@@ -661,11 +670,17 @@ body {
   .modal-container-large {
     width: 100%;
   }
+  .w-50 {
+    width: 100%;
+  }
 }
 
 @media only screen and (min-width: 601px) {
   .modal-container-large {
-    width: 75%;
+    width: 65%;
+  }
+  .w-50 {
+    width: 50%;
   }
 }
 
@@ -731,6 +746,30 @@ body {
 }
 .mx-auto {
   margin: 0 auto;
+}
+@media only screen and (min-height: 360px) {
+  .h-tall {
+    height: initial;
+    max-height: 300px;
+  }
+}
+@media only screen and (min-height: 600px) {
+  .h-tall {
+    height: initial;
+    max-height: 540px;
+  }
+}
+@media only screen and (min-height: 720px) {
+  .h-tall {
+    height: initial;
+    max-height: 660px;
+  }
+}
+@media only screen and (min-height: 1080px) {
+  .h-tall {
+    height: initial;
+    max-height: 1000px;
+  }
 }
 .h-400 {
   max-height: 400px;
