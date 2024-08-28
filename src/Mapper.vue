@@ -1,38 +1,30 @@
 <template>
   <Transition name="modal">
-    <div v-if="!loaded" class="modal-mask">
+    <div v-if="!loaded" class="modal-mask" @click="closeWelcome">
       <div class="modal-container">
         <div class="modal-header">
-          <slot name="header">Welcome</slot>
+          <slot name="header">
+            <span>Welcome</span>
+            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeWelcome" />
+          </slot>
         </div>
         <div class="modal-body">
           <slot name="body">Desktop use and headphones are strongly recommended. Please ensure your volume is turned up.</slot>
-        </div>
-        <div class="modal-footer">
-          <slot name="footer">
-            <button
-              class="modal-default-button"
-              @click="closeWelcome"
-            >OK</button>
-          </slot>
         </div>
       </div>
     </div>
   </Transition>
   <Transition name="modal">
     <div v-if="textDialog">
-      <div class="modal-wrapper modal-dim">
+      <div class="modal-wrapper modal-dim" @click="closeTextDialog">
         <div class="modal-container-large over">
+          <div class="modal-header">
+            <slot name="header">
+              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeTextDialog" />
+            </slot>
+          </div>
           <div class="modal-body">
             <slot name="body"><div v-html="textDialog"></div></slot>
-          </div>
-          <div class="modal-footer">
-            <slot name="footer">
-              <button
-                class="modal-default-button"
-                @click="closeTextDialog"
-              >OK</button>
-            </slot>
           </div>
         </div>
       </div>
@@ -40,19 +32,22 @@
   </Transition>
   <Transition name="modal">
     <div v-if="showLockedDrawerDialog">
-      <div class="modal-wrapper modal-dim">
+      <div class="modal-wrapper modal-dim" @click="closeLockedDrawer">
         <div class="modal-container-large over">
           <div class="modal-header">
-            <slot name="header">Our Wedding Anniversary</slot>
+            <slot name="header">
+              <span>Our Wedding Anniversary</span>
+              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeLockedDrawer" />
+            </slot>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" @click.stop="doNothing">
             <slot name="body">
               <div class="w-full text-center">
                 <InputMask v-model="lockedCode" class="w-50 text-center" placeholder="99/99/9999" mask="99/99/9999" slotChar="__/__/____" />
               </div>
             </slot>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer" @click.stop="doNothing">
             <slot name="footer">
               <button
                 class="modal-default-button"
@@ -65,9 +60,14 @@
     </div>
   </Transition>
   <Transition name="modal-flipbook">
-    <div v-if="flipbookDisplay" class="modal-wrapper modal-dim">
+    <div v-if="flipbookDisplay" class="modal-wrapper modal-dim" @click="closeFlipbook">
       <div class="modal-container-large">
-        <div class="modal-body">
+        <div class="modal-header">
+          <slot name="header">
+            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeFlipbook" />
+          </slot>
+        </div>
+        <div class="modal-body" @click.stop="doNothing">
           <slot name="body">
             <div class="card">
                 <Carousel
@@ -98,20 +98,17 @@
             </div>
           </slot>
         </div>
-        <div class="modal-footer">
-          <slot name="footer">
-            <button
-              class="modal-default-button"
-              @click="closeFlipbook"
-            >OK</button>
-          </slot>
-        </div>
       </div>
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="imageDisplay" class="modal-wrapper modal-dim">
+    <div v-if="imageDisplay" class="modal-wrapper modal-dim" @click="closeImage">
       <div class="modal-container-large">
+        <div class="modal-header">
+          <slot name="header">
+            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeImage" />
+          </slot>
+        </div>
         <div class="modal-body">
           <slot name="body">
             <div class="card">
@@ -121,33 +118,43 @@
             </div>
           </slot>
         </div>
-        <div class="modal-footer">
-          <slot name="footer">
-            <button
-              class="modal-default-button"
-              @click="closeImage"
-            >OK</button>
+      </div>
+    </div>
+  </Transition>
+  <Transition name="modal">
+    <div v-if="soundPlaying" class="modal-wrapper modal-dim" @click="closeAudio">
+      <div class="modal-container-large">
+        <div class="modal-header">
+          <slot name="header">
+            <div class="text-center">
+              <span>{{soundPlaying.label}}</span>
+              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeAudio" />
+            </div>
+          </slot>
+        </div>
+        <div class="modal-body" @click.stop="doNothing">
+          <slot name="body">
+            <div class="w-full mx-auto">
+              <audio class="mx-auto" controls :src="soundPlaying.src" preload="auto" />
+            </div>
           </slot>
         </div>
       </div>
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="videoDisplay" class="modal-wrapper modal-dim">
+    <div v-if="videoDisplay" class="modal-wrapper modal-dim" @click="closeVideo">
       <div class="modal-container-large">
-        <div class="modal-body">
+        <div class="modal-header">
+          <slot name="header">
+            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeVideo" />
+          </slot>
+        </div>
+        <div class="modal-body" @click.stop="doNothing">
           <slot name="body">
             <div class="card">
               <VideoPlayer :options="videoOptions" />
             </div>
-          </slot>
-        </div>
-        <div class="modal-footer">
-          <slot name="footer">
-            <button
-              class="modal-default-button"
-              @click="closeVideo"
-            >OK</button>
           </slot>
         </div>
       </div>
@@ -168,6 +175,7 @@
 
 <script>
 import { computed, defineComponent, onMounted, ref, shallowReactive } from "vue";
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 import Carousel from "primevue/carousel";
 import InputMask  from "primevue/inputmask";
 import { VueFlip } from "vue-flip";
@@ -235,6 +243,7 @@ export default defineComponent({
     ImageMapper,
     InputMask,
     VideoPlayer,
+    XMarkIcon,
     'vue-flip': VueFlip
   },
   setup() {
@@ -256,9 +265,6 @@ export default defineComponent({
       parentWidth.value = container.value.clientWidth;
     };
     let backgroundMusicArgs = useSound(backgroundMusic, { html5: true, loop: true });
-    let pianoAudioArgs = useSound(pianoAudio);
-    let proposalAudioArgs = useSound(proposalAudio);
-    let voicemailAudioArgs = useSound(voicemailAudio);
     let drawerOpenAArgs = useSound(drawerOpenA);
     let drawerOpenBArgs = useSound(drawerOpenB);
     let drawerOpenCArgs = useSound(drawerOpenC);
@@ -277,19 +283,16 @@ export default defineComponent({
         sound: backgroundMusicArgs.sound
       },
       pianoAudio: {
-        play: pianoAudioArgs.play,
-        stop: pianoAudioArgs.stop,
-        sound: pianoAudioArgs.sound
+        src: pianoAudio,
+        label: "Just some chords"
       },
       proposalAudio: {
-        play: proposalAudioArgs.play,
-        stop: proposalAudioArgs.stop,
-        sound: proposalAudioArgs.sound
+        src: proposalAudio,
+        label: "Proposal"
       },
       voicemailAudio: {
-        play: voicemailAudioArgs.play,
-        stop: voicemailAudioArgs.stop,
-        sound: voicemailAudioArgs.sound
+        src: voicemailAudio,
+        label: "Voicemail"
       },
       drawer: {
         open: [drawerOpenAArgs.play, drawerOpenBArgs.play, drawerOpenCArgs.play],
@@ -306,6 +309,7 @@ export default defineComponent({
       numScroll: 1
     }]);
     const imageDisplay = ref(null);
+    const soundPlaying = ref(null);
     const videoDisplay = ref(null);
     const videoOptions = ref({});
     const showLockedDrawerDialog = ref(false);
@@ -351,7 +355,6 @@ export default defineComponent({
       }
     };
     */
-    let soundPlaying = null;
     const postcards = [{
       front: postcard1Front,
       back: postcard1Back
@@ -390,6 +393,10 @@ export default defineComponent({
       textDialog.value = null;
     };
 
+    const closeLockedDrawer = () => {
+      showLockedDrawerDialog.value = false;
+    };
+
     const closeFlipbook = () => {
       let choice = Math.floor(Math.random()*sounds.drawer.close.length);
       sounds.drawer.close[choice]();
@@ -402,6 +409,14 @@ export default defineComponent({
       imageDisplay.value = null;
     };
 
+    const closeAudio = () => {
+      let choice = Math.floor(Math.random()*sounds.drawer.close.length);
+      sounds.drawer.close[choice]();
+      soundPlaying.value = null;
+      sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
+      sounds.backgroundMusic.play();
+    };
+
     const closeVideo = () => {
       let choice = Math.floor(Math.random()*sounds.drawer.close.length);
       sounds.drawer.close[choice]();
@@ -409,6 +424,10 @@ export default defineComponent({
       videoOptions.value = {};
       sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
       sounds.backgroundMusic.play();
+    };
+
+    const doNothing = () => {
+      // Do nothing
     };
 
     const submitCode = () => {
@@ -458,24 +477,11 @@ export default defineComponent({
           textDialog.value = `On days when Jen was too depressed to get out of bed, I would stay in bed with her and make up these dumb little stories that she called &#8220;can&#8217;t-get-out-of-bed-time stories.&#8221; Honestly, I would just say whatever nonsense popped into my head to try to make her laugh. We would do that for hours sometimes, me just holding her or playing with her hair as she drifted in and out of consciousness. I would give anything for even just one of our worst days together again.`;
           break;
         case "40":
-          if (!soundPlaying) {
-            console.log("Playing audio");
-            soundPlaying = sounds.pianoAudio;
-            soundPlaying.sound.value.fade(0, 1, 0);
-            sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
-            setTimeout(() => {
-              sounds.backgroundMusic.pause();
-              soundPlaying.play();
-            }, 1000);
-          } else {
-            soundPlaying.sound.value.fade(1, 0, 1000);
-            setTimeout(() => {
-              soundPlaying.stop();
-              sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
-              sounds.backgroundMusic.play();
-              soundPlaying = null;
-            }, 1000);
-          }
+          soundPlaying.value = sounds.pianoAudio;
+          sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
+          setTimeout(() => {
+            sounds.backgroundMusic.pause();
+          }, 1000);
           break;
         case "4":
           textDialog.value = `I remember Jen telling me about a strange experience she had as a girl. She remembers playing in her room&mdash;in this 90-year-old farmhouse and seeing a teenage girl in strange old clothing watching her with curiosity. She felt excited to have the undivided attention of someone older than her. She ran to show her mom the girl, but when they returned, she was nowhere. Jen told me that she was so desperate for attention, she began to imagine that the girl was watching her with great interest all of the time, even though she only occasionally saw her.  Making her bed or brushing her teeth was now an event worthy of an audience. Jen named the girl &#8220;Chrissy&#8221; and talked to her constantly. Her parents and teachers just assumed this was an imaginary friend of hers and that she would eventually outgrow it. Jen was 11 or 12 when it first occurred to her that Chrissy was a dead person. The feeling of being watched changed after that. She stopped talking to or acknowledging Chrissy altogether. She said she&#8217;s never told anyone about that before, but it&#8217;s part of the reason she doesn&#8217;t like going back home. The other part was her parents. Maybe it was the power of suggestion, but sleeping in her childhood bedroom, I felt it too. I never told her that. I don&#8217;t know why.`;
@@ -535,23 +541,11 @@ export default defineComponent({
           textDialog.value = `Our second year in Virginia my older sister, Patty, was diagnosed with breast cancer. Emily&#8217;s dad wasn&#8217;t in the picture and Patty didn&#8217;t have the energy to take care of Emily alone while she underwent chemo, so they came to live with us for the summer. I remember how natural Jen was with Emily. She knew how to talk to her without talking down to or over her. There was an ease between them that I couldn&#8217;t fake even though I tried. I felt embarrassed because she was my niece, but in hindsight I think Emily was too scared that her mom might die to notice my awkwardness. I did what I could to distract her with something fun by creating increasingly elaborate scavenger hunts and by helping her direct her first movie on an old camcorder I got at an estate sale. We gave them our bedroom and slept on an air mattress in the living room. I remember Jen whispering while they were sleeping that we should be prepared to adopt Emily if Patty dies. I agreed, but I was terrified.`;
           break;
         case "14":
-          if (!soundPlaying) {
-            soundPlaying = sounds.proposalAudio;
-            soundPlaying.sound.value.fade(0, 1, 0);
-            sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
-            setTimeout(() => {
-              sounds.backgroundMusic.pause();
-              soundPlaying.play();
-            }, 1000);
-          } else {
-            soundPlaying.sound.value.fade(1, 0, 1000);
-            setTimeout(() => {
-              soundPlaying.stop();
-              sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
-              sounds.backgroundMusic.play();
-              soundPlaying = null;
-            }, 1000);
-          }
+          soundPlaying.value = sounds.proposalAudio;
+          sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
+          setTimeout(() => {
+            sounds.backgroundMusic.pause();
+          }, 1000);
           break;
         case "15":
           textDialog.value = `She could be secretive. She never copped to smoking the whole time I knew her, but I would occasionally find a pack hidden in an odd place or a butt snuffed out in a flower pot. I was concerned for her health, but I was fine with it. It seemed infrequent enough, but I don&#8217;t know why she felt the need to hide it from me.`;
@@ -563,23 +557,11 @@ export default defineComponent({
           textDialog.value = `After Emily stayed with us the summer Patty was sick, Jen told me she realized she wanted to have a child. I felt betrayed. I asked her what was so wrong with our life that she felt she needed a kid to fix it. I didn&#8217;t want to get left behind, or worse, for her to realize I wouldn&#8217;t be a good dad. I was so afraid of losing her that I almost did. I&#8217;m not sure she should have stayed with me after that, but I&#8217;m glad that she did.`;
           break;
         case "20":
-          if (!soundPlaying) {
-            soundPlaying = sounds.voicemailAudio;
-            soundPlaying.sound.value.fade(0, 1, 0);
-            sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
-            setTimeout(() => {
-              sounds.backgroundMusic.pause();
-              soundPlaying.play();
-            }, 1000);
-          } else {
-            soundPlaying.sound.value.fade(1, 0, 1000);
-            setTimeout(() => {
-              soundPlaying.stop();
-              sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
-              sounds.backgroundMusic.play();
-              soundPlaying = null;
-            }, 1000);
-          }
+          soundPlaying.value = sounds.voicemailAudio;
+          sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
+          setTimeout(() => {
+            sounds.backgroundMusic.pause();
+          }, 1000);
           break;
         case "22":
           textDialog.value = `I found out she was pregnant from the coroner. When was she planning to tell me? Was she going to go through with it? Did she even know?`;
@@ -601,17 +583,21 @@ export default defineComponent({
       sounds,
       closeWelcome,
       closeTextDialog,
+      closeLockedDrawer,
       closeFlipbook,
       closeImage,
+      closeAudio,
       closeVideo,
       textDialog,
       flipbookDisplay,
       postcards,
       carouselOptions,
       imageDisplay,
+      soundPlaying,
       videoDisplay,
       videoOptions,
       showLockedDrawerDialog,
+      doNothing,
       submitCode,
       lockedCode,
       /*
