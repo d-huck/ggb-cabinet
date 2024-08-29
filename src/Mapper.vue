@@ -1,6 +1,6 @@
 <template>
   <Transition name="modal">
-    <div v-if="!loaded" class="modal-mask" @click="closeWelcome">
+    <div v-if="!loaded" class="modal-mask" @click="doNothing">
       <div class="modal-container">
         <div class="modal-header">
           <slot name="header">
@@ -135,7 +135,7 @@
         <div class="modal-body" @click.stop="doNothing">
           <slot name="body">
             <div class="w-full mx-auto">
-              <audio class="mx-auto" controls :src="soundPlaying.src" preload="auto" />
+              <audio class="mx-auto" controls autoplay :src="soundPlaying.src" preload="auto" />
             </div>
           </slot>
         </div>
@@ -175,6 +175,9 @@
 </template>
 
 <script>
+const FADE_OUT = 500;
+const FADE_IN = 50;
+const MAX_LEVEL = 0.75;
 import { computed, defineComponent, onMounted, ref, shallowReactive } from "vue";
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import Carousel from "primevue/carousel";
@@ -198,8 +201,8 @@ import 'vue-flux/style.css';
 
 // Sounds
 import backgroundMusic from './assets/audio/background_music.m4a';
-import pianoAudio from './assets/audio/piano_memory.m4a';
-import proposalAudio from './assets/audio/proposal_temp_audio.mp3';
+import pianoAudio from './assets/audio/just_some_chords.m4a';
+import proposalAudio from './assets/audio/proposal.mp3';
 import voicemailAudio from './assets/audio/voicemail.mp3';
 
 // Drawer sounds
@@ -263,7 +266,7 @@ export default defineComponent({
     });
     const parentWidth = ref(800);
     const handleResize = () => {
-      console.log("Resizing to", container.value.clientWidth);
+      // console.log("Resizing to", container.value.clientWidth);
       parentWidth.value = container.value.clientWidth;
     };
 
@@ -280,6 +283,7 @@ export default defineComponent({
     };
 
     let backgroundMusicArgs = useSound(backgroundMusic, { html5: true, loop: true, onloaderror: bkLoadError, onplay: bkPlay, onplayerror: bkPlayError });
+    let bgm_pos = 0;
     let drawerOpenAArgs = useSound(drawerOpenA);
     let drawerOpenBArgs = useSound(drawerOpenB);
     let drawerOpenCArgs = useSound(drawerOpenC);
@@ -289,12 +293,13 @@ export default defineComponent({
     let drawerStuckAArgs = useSound(drawerStuckA);
     let drawerStuckBArgs = useSound(drawerStuckB);
     let drawerStuckCArgs = useSound(drawerStuckC);
-
+    // console.log(backgroundMusicArgs);
     const sounds = {
       backgroundMusic: {
         play: backgroundMusicArgs.play,
         pause: backgroundMusicArgs.pause,
         stop: backgroundMusicArgs.stop,
+        seek: backgroundMusicArgs.sound.seek,
         sound: backgroundMusicArgs.sound
       },
       pianoAudio: {
@@ -355,11 +360,11 @@ export default defineComponent({
     const closeWelcome = () => {
       loaded.value = true;
       setTimeout(() => {
-        console.log("Start background music playing");
-        sounds.backgroundMusic.play();
+        // console.log("Start background music playing");
+        sounds.backgroundMusic.play({ volume: MAX_LEVEL });
         handleResize();
         setTimeout(() => {
-          console.log("Setting image map areas");
+          // console.log("Setting image map areas");
           areasData.value = areas;
         }, 50);
       }, 50);
@@ -391,10 +396,10 @@ export default defineComponent({
       let choice = Math.floor(Math.random()*sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       soundPlaying.value = null;
+      sounds.backgroundMusic.sound.value.fade(0, MAX_LEVEL, FADE_IN);
       setTimeout(() => {
-        sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
         sounds.backgroundMusic.play();
-      }, 50);
+      }, FADE_IN);
     };
 
     const closeVideo = () => {
@@ -402,8 +407,11 @@ export default defineComponent({
       sounds.drawer.close[choice]();
       videoDisplay.value = null;
       videoOptions.value = {};
-      sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
-      sounds.backgroundMusic.play();
+      sounds.backgroundMusic.sound.value.fade(0, MAX_LEVEL, FADE_IN);
+      setTimeout(() => {
+        sounds.backgroundMusic.play();
+      }, FADE_IN);
+      // sounds.backgroundMusic.play();
     };
 
     const doNothing = () => {
@@ -421,10 +429,10 @@ export default defineComponent({
         let phone = "";
         let address = "";
         let uri = window.location.search.substring(1); 
-        console.log("Search", window.location.search);
+        // console.log("Search", window.location.search);
         let params = new URLSearchParams(uri);
         let dateTime = params.get("d") ?? "";
-        console.log("Params", params, dateTime);
+        // console.log("Params", params, dateTime);
         if (dateTime.length > 0) {
           let hours = parseInt(dateTime.substring(8, 10));
           let ampm = "AM";
@@ -453,13 +461,13 @@ export default defineComponent({
     };
 
     const handleImageMapClick = (area, index, event) => {
-      console.log(area, index);
+      // console.log(area, index);
       let choice = Math.floor(Math.random()*sounds.drawer.open.length);
-      if (area.name !== "10") {
-        sounds.drawer.open[choice]();
-      } else {
+      if (area.name === "10") {
         sounds.drawer.stuck[choice]();
-      }
+      } else if (area.name) {
+        sounds.drawer.open[choice]();
+      } 
 
       switch (area.name) {
         case "1":
@@ -472,10 +480,11 @@ export default defineComponent({
           break;
         case "40":
           soundPlaying.value = sounds.pianoAudio;
-          sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
+          sounds.backgroundMusic.sound.value.fade(MAX_LEVEL, 0, FADE_OUT);
           setTimeout(() => {
             sounds.backgroundMusic.pause();
-          }, 1000);
+          }, FADE_OUT);
+          bgm_pos = sounds.backgroundMusic.sound.value.seek();
           break;
         case "4":
           textDialog.value = `I remember Jen telling me about a strange experience she had as a girl. She remembers playing in her room&mdash;in this 90-year-old farmhouse and seeing a teenage girl in strange old clothing watching her with curiosity. She felt excited to have the undivided attention of someone older than her. She ran to show her mom the girl, but when they returned, she was nowhere. Jen told me that she was so desperate for attention, she began to imagine that the girl was watching her with great interest all of the time, even though she only occasionally saw her.  Making her bed or brushing her teeth was now an event worthy of an audience. Jen named the girl &#8220;Chrissy&#8221; and talked to her constantly. Her parents and teachers just assumed this was an imaginary friend of hers and that she would eventually outgrow it. Jen was 11 or 12 when it first occurred to her that Chrissy was a dead person. The feeling of being watched changed after that. She stopped talking to or acknowledging Chrissy altogether. She said she&#8217;s never told anyone about that before, but it&#8217;s part of the reason she doesn&#8217;t like going back home. The other part was her parents. Maybe it was the power of suggestion, but sleeping in her childhood bedroom, I felt it too. I never told her that. I don&#8217;t know why.`;
@@ -486,10 +495,11 @@ export default defineComponent({
           When she saw the MRE stockpile and go bag in the camper, she asked me if I was a prepper. I explained to her that I was prepping for climate change and the societal collapse that follows. I kept thinking to myself: this is it. This is how I lose her. But she just listened. She never ridiculed me or told me I was overreacting.`;
           break;
         case "6":
-          sounds.backgroundMusic.sound.value.fade(1, 0, 500);
+          sounds.backgroundMusic.sound.value.fade(MAX_LEVEL, 0, FADE_OUT);
           setTimeout(() => {
             sounds.backgroundMusic.pause();
-          }, 500);
+          }, FADE_OUT);
+          bgm_pos = sounds.backgroundMusic.sound.value.seek();
           videoDisplay.value = phoneVideo;
           videoOptions.value = {
             autoplay: true,
@@ -528,10 +538,11 @@ export default defineComponent({
           break;
         case "14":
           soundPlaying.value = sounds.proposalAudio;
-          sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
+          sounds.backgroundMusic.sound.value.fade(MAX_LEVEL, 0, FADE_OUT);
           setTimeout(() => {
             sounds.backgroundMusic.pause();
-          }, 1000);
+          }, FADE_OUT);
+          bgm_pos = sounds.backgroundMusic.sound.value.seek();
           break;
         case "15":
           textDialog.value = `She could be secretive. She never copped to smoking the whole time I knew her, but I would occasionally find a pack hidden in an odd place or a butt snuffed out in a flower pot. I was concerned for her health, but I was fine with it. It seemed infrequent enough, but I don&#8217;t know why she felt the need to hide it from me.`;
@@ -544,10 +555,11 @@ export default defineComponent({
           break;
         case "20":
           soundPlaying.value = sounds.voicemailAudio;
-          sounds.backgroundMusic.sound.value.fade(1, 0, 1000);
+          sounds.backgroundMusic.sound.value.fade(MAX_LEVEL, 0, FADE_OUT);
           setTimeout(() => {
             sounds.backgroundMusic.pause();
-          }, 1000);
+          }, FADE_OUT);
+          bgm_pos = sounds.backgroundMusic.sound.value.seek();
           break;
         case "22":
           textDialog.value = `I found out she was pregnant from the coroner. When was she planning to tell me? Was she going to go through with it? Did she even know?`;
