@@ -137,6 +137,8 @@ export default defineComponent({
       const imageWidth = this.getValues('width', imgWidth);
       const imageHeight = this.getValues('height', imgHeight);
 
+      console.log("initialized canvas, imageWidth:", imageWidth)
+
       if (this.width || this.responsive) {
         this.$refs.img.width = this.getValues('width', imgWidth, 'image');
       }

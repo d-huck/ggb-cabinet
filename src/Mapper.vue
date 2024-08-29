@@ -164,7 +164,7 @@
     <div class="app-header" ref="header" v-if="loaded">
       <h3>Virginia Combs</h3>
     </div>
-    <div class="mapper-container" ref="container" v-if="loaded">
+    <div class="mapper-container" ref="cabinet" v-if="loaded">
       <ImageMapper
         :src="src"
         :map="map"
@@ -227,7 +227,7 @@ import drawerStuckB from './assets/audio/drawer/soundfx-stuck_b.mp3';
 import drawerStuckC from './assets/audio/drawer/soundfx-stuck_c.mp3';
 
 // Cabinet image
-import cabinetImage from './assets/images/cabinet.jpg';
+import cabinetImage from './assets/images/cabinet2.jpg';
 
 // Letter
 import letterImage from './assets/images/letter.png';
@@ -274,7 +274,7 @@ export default defineComponent({
     });
     const parentWidth = ref(800);
     const handleResize = () => {
-      // console.log("Resizing to", container.value.clientWidth);
+      console.log("Resizing to", container.value.clientWidth);
       parentWidth.value = container.value.clientWidth;
     };
 
