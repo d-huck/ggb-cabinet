@@ -122,13 +122,13 @@
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="soundPlaying" class="modal-wrapper modal-dim" @click="closeAudio">
+    <div v-if="soundPlaying" class="modal-wrapper modal-dim" @click.stop="closeAudio">
       <div class="modal-container-large">
         <div class="modal-header">
           <slot name="header">
             <div class="text-center">
               <span>{{soundPlaying.label}}</span>
-              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeAudio" />
+              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click.stop="closeAudio" />
             </div>
           </slot>
         </div>
