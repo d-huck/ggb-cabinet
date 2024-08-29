@@ -82,12 +82,12 @@
                                 <vue-flip active-click width="100%" height="400px" transition="1.0s">
                                   <template v-slot:front>
                                     <div class="w-full relative mx-auto">
-                                      <img :src="slotProps.data.front" class="h-400 rounded mx-auto" />
+                                      <img :src="slotProps.data.back" class="h-400 rounded mx-auto" />
                                     </div>
                                   </template>
                                   <template v-slot:back>
                                     <div class="w-full relative mx-auto">
-                                      <img :src="slotProps.data.back" class="h-400 rounded mx-auto" />
+                                      <img :src="slotProps.data.front" class="h-400 rounded mx-auto" />
                                     </div>
                                   </template>
                                 </vue-flip>
@@ -169,6 +169,7 @@
       :parentWidth="parentWidth"
       :responsive="true"
       @click="handleImageMapClick"
+      v-on:click="handleImageMapClick"
     />
   </div>
 </template>
@@ -196,7 +197,7 @@ import {
 import 'vue-flux/style.css';
 
 // Sounds
-import backgroundMusic from './assets/audio/background_music.mp3';
+import backgroundMusic from './assets/audio/background_music.m4a';
 import pianoAudio from './assets/audio/piano_memory.m4a';
 import proposalAudio from './assets/audio/proposal_temp_audio.mp3';
 import voicemailAudio from './assets/audio/voicemail.mp3';
@@ -262,9 +263,23 @@ export default defineComponent({
     });
     const parentWidth = ref(800);
     const handleResize = () => {
+      console.log("Resizing to", container.value.clientWidth);
       parentWidth.value = container.value.clientWidth;
     };
-    let backgroundMusicArgs = useSound(backgroundMusic, { html5: true, loop: true });
+
+    const bkLoadError = (id, err) => {
+      console.log("Background sound load error", id, err);
+    };
+
+    const bkPlay = (id) => {
+      console.log("Background sound playing");
+    };
+
+    const bkPlayError = (id, err) => {
+      console.log("Background sound play error", id, err);
+    };
+
+    let backgroundMusicArgs = useSound(backgroundMusic, { html5: true, loop: true, onloaderror: bkLoadError, onplay: bkPlay, onplayerror: bkPlayError });
     let drawerOpenAArgs = useSound(drawerOpenA);
     let drawerOpenBArgs = useSound(drawerOpenB);
     let drawerOpenCArgs = useSound(drawerOpenC);
@@ -314,47 +329,6 @@ export default defineComponent({
     const videoOptions = ref({});
     const showLockedDrawerDialog = ref(false);
     const lockedCode = ref("");
-    /*
-    const lockedCode1 = ref("__");
-    const lockedCode2 = ref("__");
-    const lockedCode3 = ref("____");
-    const lockedCode1Field = ref(null);
-    const lockedCode2Field = ref(null);
-    const lockedCode3Field = ref(null);
-    const lockedCode1Change = (e) => {
-      let newValue = lockedCode1.value.replace("_", "");
-      while (newValue.length < 2) {
-        newValue = newValue + "_";
-      }
-      if (newValue !== lockedCode1.value) {
-        lockedCode1.value = newValue;
-      }
-      if (lockedCode1.value.replace("_", "").length === 2) {
-        lockedCode2Field.value.focus();
-      }
-    };
-    const lockedCode2Change = (e) => {
-      let newValue = lockedCode2.value.replace("_", "");
-      while (newValue.length < 2) {
-        newValue = newValue + "_";
-      }
-      if (newValue !== lockedCode2.value) {
-        lockedCode2.value = newValue;
-      }
-      if (lockedCode2.value.replace("_", "").length === 2) {
-        lockedCode3Field.value.focus();
-      }
-    };
-    const lockedCode3Change = (e) => {
-      let newValue = lockedCode3.value.replace("_", "");
-      while (newValue.length < 4) {
-        newValue = newValue + "_";
-      }
-      if (newValue !== lockedCode3.value) {
-        lockedCode3.value = newValue;
-      }
-    };
-    */
     const postcards = [{
       front: postcard1Front,
       back: postcard1Back
@@ -381,9 +355,13 @@ export default defineComponent({
     const closeWelcome = () => {
       loaded.value = true;
       setTimeout(() => {
-        areasData.value = areas;
+        console.log("Start background music playing");
         sounds.backgroundMusic.play();
         handleResize();
+        setTimeout(() => {
+          console.log("Setting image map areas");
+          areasData.value = areas;
+        }, 50);
       }, 50);
     };
 
@@ -413,8 +391,10 @@ export default defineComponent({
       let choice = Math.floor(Math.random()*sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       soundPlaying.value = null;
-      sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
-      sounds.backgroundMusic.play();
+      setTimeout(() => {
+        sounds.backgroundMusic.sound.value.fade(0, 1, 1000);
+        sounds.backgroundMusic.play();
+      }, 50);
     };
 
     const closeVideo = () => {
@@ -441,8 +421,22 @@ export default defineComponent({
         let phone = "";
         let address = "";
         let uri = window.location.search.substring(1); 
+        console.log("Search", window.location.search);
         let params = new URLSearchParams(uri);
-        let dateTime = params.d ?? "";
+        let dateTime = params.get("d") ?? "";
+        console.log("Params", params, dateTime);
+        if (dateTime.length > 0) {
+          let hours = parseInt(dateTime.substring(8, 10));
+          let ampm = "AM";
+          if (hours >= 12) {
+            ampm = "PM";
+            if (hours > 12) {
+              hours -= 12;
+            }
+          }
+          dateTime = dateTime.substring(4, 6) + "/" + dateTime.substring(6, 8) + "/" + dateTime.substring(0, 4) +
+            " at " + String(hours) + ":" + dateTime.substring(10, 12) + " " + ampm;
+        }
         showLockedDrawerDialog.value = false;
         textDialog.value = `&#8220;Emily,<br>
         <br>
@@ -520,14 +514,6 @@ export default defineComponent({
         case "10":
           showLockedDrawerDialog.value = true;
           lockedCode.value = "";
-          /*
-          lockedCode1.value = "__";
-          lockedCode2.value = "__";
-          lockedCode3.value = "____";
-          setTimeout(() => {
-            lockedCode1Field.value.focus();
-          }, 50);
-          */
           break;
         case "11":
           textDialog.value = `Jen found a nest of baby rabbits. She knew to leave them alone under normal circumstances, but their mother never returned. The nearest wild rehabilitation was already at capacity, so she bottle fed them every two hours for eight days, only taking breaks when I could relieve her for a nap. We lost one of them, but the others managed to survive long enough to feed themselves. She built them a rabbit hutch in the backyard and frequently brought them inside to play. She cared for them for over a year.<br>
@@ -600,17 +586,6 @@ export default defineComponent({
       doNothing,
       submitCode,
       lockedCode,
-      /*
-      lockedCode1,
-      lockedCode2,
-      lockedCode3,
-      lockedCode1Field,
-      lockedCode2Field,
-      lockedCode3Field,
-      lockedCode1Change,
-      lockedCode2Change,
-      lockedCode3Change,
-      */
       handleImageMapClick,
     };
   }
@@ -675,12 +650,6 @@ body {
   z-index: 1000;
 }
 
-/*
-.modal-container.over,
-.modal-container-large.over {
-  position: absolute;
-}
-*/
 .modal-container,
 .modal-container-large {
   margin: auto;
