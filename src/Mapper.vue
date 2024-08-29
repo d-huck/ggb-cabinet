@@ -160,17 +160,22 @@
       </div>
     </div>
   </Transition>
-  <div class="mapper-container" ref="container" v-if="loaded">
-    <ImageMapper
-      :src="src"
-      :map="map"
-      :width="parentWidth"
-      :imgWidth="2500"
-      :parentWidth="parentWidth"
-      :responsive="true"
-      @click="handleImageMapClick"
-      v-on:click="handleImageMapClick"
-    />
+  <div class="app-container" ref="container" v-if="loaded">
+    <div class="app-header" ref="header" v-if="loaded">
+      <h3>Virginia Combs</h3>
+    </div>
+    <div class="mapper-container" ref="container" v-if="loaded">
+      <ImageMapper
+        :src="src"
+        :map="map"
+        :width="parentWidth"
+        :imgWidth="2500"
+        :parentWidth="parentWidth"
+        :responsive="true"
+        @click="handleImageMapClick"
+        v-on:click="handleImageMapClick"
+      />
+    </div>
   </div>
 </template>
 
@@ -198,6 +203,9 @@ import {
   Zip,
 } from 'vue-flux';
 import 'vue-flux/style.css';
+
+//fonts
+import typewriter from './assets/fonts/typewriter.ttf';
 
 // Sounds
 import backgroundMusic from './assets/audio/background_music.m4a';
@@ -608,7 +616,8 @@ export default defineComponent({
 <style>
 body {
   color: black;
-  background-color: #16012b;
+  background-color: #8f950b;
+  /* background-color: #3e8b43; */
 }
 .modal-mask {
   position: fixed;
@@ -617,7 +626,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.99);
   display: flex;
   transition: opacity 0.3s ease;
 }
@@ -633,7 +642,7 @@ body {
   z-index: 1000;
 }
 .modal-dim {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.85);
   transition: opacity 0.3s ease;
 }
 
@@ -665,11 +674,19 @@ body {
   z-index: 1000;
 }
 
+@font-face {
+  font-family: "Typewriter";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./assets/fonts/typewriter.ttf") format("truetype");
+}
+
 .modal-container,
 .modal-container-large {
   margin: auto;
   padding: 20px 30px;
-  background-color: #fff;
+  background-color: #f3e3b2;
+  font-family: 'Typewriter', 'Courier New', Courier, monospace;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
@@ -711,19 +728,38 @@ body {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+h3 {
+    font-family: 'Typewriter', 'Courier New', Courier, monospace;
+  }
+
 @media only screen and (max-width: 720px) {
-  .mapper-container {
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
+    height: 100vh;
+  }
+  h3 {
+    font-size: 2.5rem !important;
   }
 }
 
 @media only screen and (min-width: 721px) {
-  .mapper-container {
+  .app-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 1024px;
     width: 75%;
+    height: 100vh;
     margin: auto;
+  }
+  h3 {
+    font-size: 3.5rem !important;
+    padding-bottom: 1vh;
   }
 }
 
