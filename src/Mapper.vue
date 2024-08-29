@@ -177,7 +177,7 @@
 <script>
 const FADE_OUT = 500;
 const FADE_IN = 50;
-const MAX_LEVEL = 0.75;
+const MAX_LEVEL = 0.5;
 import { computed, defineComponent, onMounted, ref, shallowReactive } from "vue";
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import Carousel from "primevue/carousel";
@@ -361,7 +361,8 @@ export default defineComponent({
       loaded.value = true;
       setTimeout(() => {
         // console.log("Start background music playing");
-        sounds.backgroundMusic.play({ volume: MAX_LEVEL });
+        sounds.backgroundMusic.sound.value.level = MAX_LEVEL;
+        sounds.backgroundMusic.play();
         handleResize();
         setTimeout(() => {
           // console.log("Setting image map areas");
@@ -607,6 +608,7 @@ export default defineComponent({
 <style>
 body {
   color: black;
+  background-color: #16012b;
 }
 .modal-mask {
   position: fixed;
@@ -642,6 +644,7 @@ body {
 @media only screen and (max-width: 600px) {
   .modal-container-large {
     width: 100%;
+    height: 100vh;
   }
   .w-50 {
     width: 100%;
@@ -650,7 +653,7 @@ body {
 
 @media only screen and (min-width: 601px) {
   .modal-container-large {
-    width: 65%;
+    width: 45%;
   }
   .w-50 {
     width: 50%;
@@ -708,9 +711,22 @@ body {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
-.mapper-container {
-  width: 100%;
+@media only screen and (max-width: 720px) {
+  .mapper-container {
+    width: 100%;
+  }
 }
+
+@media only screen and (min-width: 721px) {
+  .mapper-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    margin: auto;
+  }
+}
+
 .mx-auto {
   margin: 0 auto;
 }
