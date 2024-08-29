@@ -9,7 +9,7 @@
           </slot>
         </div>
         <div class="modal-body">
-          <slot name="body">Desktop use and headphones are strongly recommended. Please ensure your volume is turned up.</slot>
+          <slot name="body">This memorial works best on Desktop and contains audio. Headphoens are strongly recommended and please make sure your volume is turned up.</slot>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
   </Transition>
   <Transition name="modal-flipbook">
     <div v-if="flipbookDisplay" class="modal-wrapper modal-dim" @click="closeFlipbook">
-      <div class="modal-container-large">
+      <div class="modal-container-media">
         <div class="modal-header">
           <slot name="header">
             <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeFlipbook" />
@@ -77,16 +77,16 @@
                   :responsiveOptions="carouselOptions"
                 >
                     <template #item="slotProps">
-                        <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
-                            <div class="relative mx-auto cursor-pointer">
-                                <vue-flip active-click width="100%" height="400px" transition="1.0s">
+                        <div class="flip-container border-surface-200 dark:border-surface-700 rounded">
+                            <div class="flex mx-auto cursor-pointer">
+                                <vue-flip active-click width="100%" height="600px" transition="1.0s">
                                   <template v-slot:front>
-                                    <div class="w-full relative mx-auto">
-                                      <img :src="slotProps.data.back" class="h-400 rounded mx-auto" />
+                                    <div class="flip-item w-full flex mx-auto">
+                                      <img :src="slotProps.data.back" class="h-400 rounded mx-auto justify-self-center" />
                                     </div>
                                   </template>
                                   <template v-slot:back>
-                                    <div class="w-full relative mx-auto">
+                                    <div class="flip-item w-full flex mx-auto">
                                       <img :src="slotProps.data.front" class="h-400 rounded mx-auto" />
                                     </div>
                                   </template>
@@ -162,7 +162,8 @@
   </Transition>
   <div class="app-container" ref="container" v-if="loaded">
     <div class="app-header" ref="header" v-if="loaded">
-      <h3>Virginia Combs</h3>
+      <h3>Virginia Ellen Combs</h3>
+      <h4>1984 - 2016</h4>
     </div>
     <div class="mapper-container" ref="cabinet" v-if="loaded">
       <ImageMapper
@@ -204,13 +205,10 @@ import {
 } from 'vue-flux';
 import 'vue-flux/style.css';
 
-//fonts
-import typewriter from './assets/fonts/typewriter.ttf';
-
 // Sounds
 import backgroundMusic from './assets/audio/background_music.m4a';
 import pianoAudio from './assets/audio/just_some_chords.m4a';
-import proposalAudio from './assets/audio/proposal.mp3';
+import proposalAudio from './assets/audio/proposal.m4a';
 import voicemailAudio from './assets/audio/voicemail.mp3';
 
 // Drawer sounds
@@ -227,22 +225,22 @@ import drawerStuckB from './assets/audio/drawer/soundfx-stuck_b.mp3';
 import drawerStuckC from './assets/audio/drawer/soundfx-stuck_c.mp3';
 
 // Cabinet image
-import cabinetImage from './assets/images/cabinet2.jpg';
+import cabinetImage from './assets/images/cabinet.webp';
 
 // Letter
-import letterImage from './assets/images/letter.png';
+import letterImage from './assets/images/letter.webp';
 
 // Postcards
-import postcard1Front from './assets/images/postcards/postcard 1 front.png';
-import postcard1Back from './assets/images/postcards/postcard 1 back.png';
-import postcard2Front from './assets/images/postcards/postcard 2 front.png';
-import postcard2Back from './assets/images/postcards/postcard 2 back.png';
-import postcard3Front from './assets/images/postcards/postcard 3 front.png';
-import postcard3Back from './assets/images/postcards/postcard 3 back.png';
-import postcard4Front from './assets/images/postcards/postcard 4 front.png';
-import postcard4Back from './assets/images/postcards/postcard 4 back.png';
-import postcard5Front from './assets/images/postcards/postcard-05-front.png';
-import postcard5Back from './assets/images/postcards/postcard-05-back.png';
+import postcard1Front from './assets/images/postcards/postcard-01-front.webp';
+import postcard1Back from './assets/images/postcards/postcard-01-back.webp';
+import postcard2Front from './assets/images/postcards/postcard-02-front.webp';
+import postcard2Back from './assets/images/postcards/postcard-02-back.webp';
+import postcard3Front from './assets/images/postcards/postcard-03-front.webp';
+import postcard3Back from './assets/images/postcards/postcard-03-back.webp';
+import postcard4Front from './assets/images/postcards/postcard-04-front.webp';
+import postcard4Back from './assets/images/postcards/postcard-04-back.webp';
+import postcard5Front from './assets/images/postcards/postcard-05-front.webp';
+import postcard5Back from './assets/images/postcards/postcard-05-back.webp';
 
 import phoneVideo from './assets/video/PXL_20240713_164815821.mp4';
 
@@ -268,6 +266,7 @@ export default defineComponent({
       name: 'my-map',
       areas: areasData.value,
     }));
+    const date = ref(null);
     const container = ref(null);
     onMounted(() => {
       window.addEventListener('resize', handleResize);
@@ -427,37 +426,47 @@ export default defineComponent({
       // Do nothing
     };
 
+    const parseDate = () => {
+      console.log("Parsing date");
+        let uri = window.location.search.substring(1); 
+        let params = new URLSearchParams(uri);
+        let dateTime = params.get("d") ?? "";
+        window.history.replaceState({}, document.title, window.location.pathname);
+        // console.log("params:", params.toString());
+        // console.log("Datetime:", dateTime);
+        if (dateTime.length > 0) {
+          let date_obj = new Date(
+            dateTime.substring(0, 4) + "-" +
+            dateTime.substring(4, 6) + "-" +
+            dateTime.substring(6, 8) + "T" +
+            dateTime.substring(8, 10) + ":" +
+            dateTime.substring(10, 12) + ":00"
+          );
+          let formatted_date = `${date_obj.toLocaleDateString('en-US', {weekday: 'long'})}, ${date_obj.toLocaleDateString('en-US', {month: 'long'})} ${date_obj.getDate()}, ${date_obj.getFullYear()} at ${date_obj.toLocaleTimeString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})}`;
+          console.log("formatted date:", formatted_date);
+          date.value = formatted_date;
+        } else if (!date.value) {
+          date.value = null;
+        }
+        console.log("Date value:", date.value);
+    }
+    parseDate();
+
     const submitCode = () => {
       //let lockedCode = lockedCode1.value + "/" + lockedCode2.value + "/" + lockedCode3.value;
-      if (
+      if (date.value &&
         (lockedCode.value === "04/15/2015") ||
         (lockedCode.value === "4/15/2015") ||
         (lockedCode.value === "04/15/15") ||
         (lockedCode.value === "4/15/15")
       ) {
-        let phone = "";
-        let address = "";
-        let uri = window.location.search.substring(1); 
-        // console.log("Search", window.location.search);
-        let params = new URLSearchParams(uri);
-        let dateTime = params.get("d") ?? "";
-        // console.log("Params", params, dateTime);
-        if (dateTime.length > 0) {
-          let hours = parseInt(dateTime.substring(8, 10));
-          let ampm = "AM";
-          if (hours >= 12) {
-            ampm = "PM";
-            if (hours > 12) {
-              hours -= 12;
-            }
-          }
-          dateTime = dateTime.substring(4, 6) + "/" + dateTime.substring(6, 8) + "/" + dateTime.substring(0, 4) +
-            " at " + String(hours) + ":" + dateTime.substring(10, 12) + " " + ampm;
-        }
+        let phone = "270-316-8424";
+        let address = "3770 FM1854, Dale, TX 78616";
+        
         showLockedDrawerDialog.value = false;
         textDialog.value = `&#8220;Emily,<br>
         <br>
-        If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. Call ${phone} when you arrive at ${address} and someone will meet you there on ${dateTime} to let you in. Don&#8217;t be late.<br>
+        If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. Call ${phone} when you arrive at ${address} and someone will meet you there on ${date.value} to let you in. Don&#8217;t be late.<br>
         <br>
         -Henry&#8221;`;
         let choice = Math.floor(Math.random()*sounds.drawer.open.length);
@@ -531,8 +540,10 @@ export default defineComponent({
           flipbookDisplay.value = true;
           break;
         case "10":
-          showLockedDrawerDialog.value = true;
-          lockedCode.value = "";
+          if (date.value) {
+            showLockedDrawerDialog.value = true;
+            lockedCode.value = "";
+          }
           break;
         case "11":
           textDialog.value = `Jen found a nest of baby rabbits. She knew to leave them alone under normal circumstances, but their mother never returned. The nearest wild rehabilitation was already at capacity, so she bottle fed them every two hours for eight days, only taking breaks when I could relieve her for a nap. We lost one of them, but the others managed to survive long enough to feed themselves. She built them a rabbit hutch in the backyard and frequently brought them inside to play. She cared for them for over a year.<br>
@@ -614,8 +625,31 @@ export default defineComponent({
 </script>
 
 <style>
+@font-face {
+  font-family: "Typewriter";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./fonts/jmh_typewriter.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Typewriter";
+  font-style: normal;
+  font-weight: bold;
+  src: url("./fonts/jmh_typewriter_bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Aston";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./fonts/aston.ttf") format("truetype");
+}
+
 body {
   color: black;
+  /* background-color: white; */
+  /* background-color: #f3e3b2; */
   background-color: #8f950b;
   /* background-color: #3e8b43; */
 }
@@ -655,6 +689,10 @@ body {
     width: 100%;
     height: 100vh;
   }
+  .modal-container-media {
+    width: 100%;
+    height: 100vh;
+  }
   .w-50 {
     width: 100%;
   }
@@ -662,26 +700,42 @@ body {
 
 @media only screen and (min-width: 601px) {
   .modal-container-large {
-    width: 45%;
+    width: 60%;
+  }
+  .modal-container-media {
+    width: 80%;
   }
   .w-50 {
     width: 50%;
   }
 }
 
+@media only screen and (min-width: 1024px) {
+  .modal-container-media {
+    width: 60%;
+  }
+  .modal-container-large {
+    width: 45%;
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .modal-container-media {
+    width: 45%;
+  }
+  .modal-container-large {
+    width: 35%;
+  }
+}
+
+
 .modal-container-large {
   position: absolute;
   z-index: 1000;
 }
 
-@font-face {
-  font-family: "Typewriter";
-  font-style: normal;
-  font-weight: normal;
-  src: url("./assets/fonts/typewriter.ttf") format("truetype");
-}
-
 .modal-container,
+.modal-container-media,
 .modal-container-large {
   margin: auto;
   padding: 20px 30px;
@@ -696,7 +750,10 @@ body {
   color: #42b983;
 }
 .modal-body {
-  margin: 20px 0;
+  margin: 20px 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-x: scroll;
 }
 .modal-default-button {
   float: right;
@@ -729,7 +786,7 @@ body {
   transform: scale(1.1);
 }
 
-h3 {
+h3, h4 {
     font-family: 'Typewriter', 'Courier New', Courier, monospace;
   }
 
@@ -738,11 +795,17 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    margin: auto;
+    margin-top: 0.5vh;
+    width: 98%;
     height: 100vh;
+    justify-items: flex-start;
   }
   h3 {
     font-size: 2.5rem !important;
+  }
+  h4 {
+    font-size: 1rem !important;
   }
 }
 
@@ -750,17 +813,59 @@ h3 {
   .app-container {
     display: flex;
     flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    max-width: 95vh;
+    max-height: 90vw;
+    width: 98vw;
+    height: 95vh;
+    margin: auto;
+    margin-top: 2.5vh;
+    margin-bottom: 2.5vh;
+  }
+
+  .flip-container {
+    margin: auto;
+    height: 640px;
     justify-content: center;
     align-items: center;
-    max-width: 1024px;
-    width: 75%;
-    height: 100vh;
-    margin: auto;
   }
   h3 {
-    font-size: 3.5rem !important;
+    font-size: 2.5rem !important;
+    font-weight: bold;
     padding-bottom: 1vh;
+    align-items: center;
   }
+  h4 {
+    font-size: 2rem !important;
+    align-items: center;
+  }
+}
+.app-header {
+  margin-top: 2.5vh;
+}
+.app-header h3 {
+  font-family: 'Aston', 'Brush Script MT', cursive;
+  color: #000;
+  text-align: center;
+}
+
+.app-header h3 {
+  padding-top: 1vh;
+  padding-bottom: 2px;
+}
+
+.app-header h4 {
+  padding-top: 0px;
+  padding-bottom: 1vh;
+  text-align: center;;
+}
+
+.flip-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .mx-auto {
@@ -792,6 +897,10 @@ h3 {
 }
 .h-400 {
   max-height: 400px;
+  height: initial;
+}
+.h-400 {
+  max-height: 600px;
   height: initial;
 }
 </style>
