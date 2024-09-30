@@ -9,7 +9,7 @@
           </slot>
         </div>
         <div class="modal-body">
-          <slot name="body">This memorial works best on Desktop and contains audio. Headphoens are strongly recommended and please make sure your volume is turned up.</slot>
+          <slot name="body">This memorial works best on Desktop and contains audio. Headphones are strongly recommended and please make sure your volume is turned up.</slot>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
             </slot>
           </div>
           <div class="modal-body">
-            <slot name="body"><div v-html="textDialog"></div></slot>
+            <slot name="body"><div class="modal-text" v-html="textDialog"></div></slot>
           </div>
         </div>
       </div>
@@ -36,7 +36,8 @@
         <div class="modal-container-large over">
           <div class="modal-header">
             <slot name="header">
-              <span>Our Wedding Anniversary</span>
+              <!-- TODO: This is a little ambiguous -->
+              <span>The date Jen and I were married.</span>
               <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeLockedDrawer" />
             </slot>
           </div>
@@ -162,8 +163,8 @@
   </Transition>
   <div class="app-container" ref="container" v-if="loaded">
     <div class="app-header" ref="header" v-if="loaded">
-      <h3>Virginia Ellen Combs</h3>
-      <h4>1984 - 2016</h4>
+      <h3>Jennifer Ellen Combs</h3>
+      <!-- <h4>1984 - 2016</h4> -->
     </div>
     <div class="mapper-container" ref="cabinet" v-if="loaded">
       <ImageMapper
@@ -173,6 +174,7 @@
         :imgWidth="2500"
         :parentWidth="parentWidth"
         :responsive="true"
+        onrendered="handleResize"
         @click="handleImageMapClick"
         v-on:click="handleImageMapClick"
       />
@@ -225,7 +227,7 @@ import drawerStuckB from './assets/audio/drawer/soundfx-stuck_b.mp3';
 import drawerStuckC from './assets/audio/drawer/soundfx-stuck_c.mp3';
 
 // Cabinet image
-import cabinetImage from './assets/images/cabinet.webp';
+import cabinetImage from './assets/images/cabinet.jpg';
 
 // Letter
 import letterImage from './assets/images/letter.webp';
@@ -242,7 +244,7 @@ import postcard4Back from './assets/images/postcards/postcard-04-back.webp';
 import postcard5Front from './assets/images/postcards/postcard-05-front.webp';
 import postcard5Back from './assets/images/postcards/postcard-05-back.webp';
 
-import phoneVideo from './assets/video/PXL_20240713_164815821.mp4';
+import phoneVideo from './assets/video/first_date.mp4';
 
 // Areas
 import areas from './assets/areas.json';
@@ -319,7 +321,7 @@ export default defineComponent({
       },
       voicemailAudio: {
         src: voicemailAudio,
-        label: "Voicemail"
+        label: "Please don't be mad"
       },
       drawer: {
         open: [drawerOpenAArgs.play, drawerOpenBArgs.play, drawerOpenCArgs.play],
@@ -370,12 +372,12 @@ export default defineComponent({
         // console.log("Start background music playing");
         sounds.backgroundMusic.sound.value.level = MAX_LEVEL;
         sounds.backgroundMusic.play();
-        handleResize();
-        setTimeout(() => {
-          // console.log("Setting image map areas");
-          areasData.value = areas;
-        }, 50);
       }, 50);
+      setTimeout(() => {
+        // console.log("Setting image map areas");
+        areasData.value = areas;
+        handleResize();
+      }, 100);
     };
 
     const closeTextDialog = () => {
@@ -431,7 +433,7 @@ export default defineComponent({
         let uri = window.location.search.substring(1); 
         let params = new URLSearchParams(uri);
         let dateTime = params.get("d") ?? "";
-        window.history.replaceState({}, document.title, window.location.pathname);
+        // window.history.replaceState({}, document.title, window.location.pathname);
         // console.log("params:", params.toString());
         // console.log("Datetime:", dateTime);
         if (dateTime.length > 0) {
@@ -461,14 +463,16 @@ export default defineComponent({
         (lockedCode.value === "4/15/15")
       ) {
         let phone = "270-316-8424";
-        let address = "3770 FM1854, Dale, TX 78616";
+        let address = "Lost Horizon Cidery Mill, 3770 FM1854, Dale, TX 78616";
         
         showLockedDrawerDialog.value = false;
-        textDialog.value = `&#8220;Emily,<br>
+        textDialog.value = `Emily,<br>
         <br>
-        If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. Call ${phone} when you arrive at ${address} and someone will meet you there on ${date.value} to let you in. Don&#8217;t be late.<br>
+        If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. It's parked at ${address} and I've arranged someone to meet you there on ${date.value}. 
+        <br />
+        <br>Call ${phone} when you arrive and they'll let you in. Don&#8217;t be late.<br>
         <br>
-        -Henry&#8221;`;
+        -Henry;`;
         let choice = Math.floor(Math.random()*sounds.drawer.open.length);
         sounds.drawer.open[choice]();
       } else {
@@ -505,7 +509,11 @@ export default defineComponent({
           bgm_pos = sounds.backgroundMusic.sound.value.seek();
           break;
         case "4":
-          textDialog.value = `I remember Jen telling me about a strange experience she had as a girl. She remembers playing in her room&mdash;in this 90-year-old farmhouse and seeing a teenage girl in strange old clothing watching her with curiosity. She felt excited to have the undivided attention of someone older than her. She ran to show her mom the girl, but when they returned, she was nowhere. Jen told me that she was so desperate for attention, she began to imagine that the girl was watching her with great interest all of the time, even though she only occasionally saw her.  Making her bed or brushing her teeth was now an event worthy of an audience. Jen named the girl &#8220;Chrissy&#8221; and talked to her constantly. Her parents and teachers just assumed this was an imaginary friend of hers and that she would eventually outgrow it. Jen was 11 or 12 when it first occurred to her that Chrissy was a dead person. The feeling of being watched changed after that. She stopped talking to or acknowledging Chrissy altogether. She said she&#8217;s never told anyone about that before, but it&#8217;s part of the reason she doesn&#8217;t like going back home. The other part was her parents. Maybe it was the power of suggestion, but sleeping in her childhood bedroom, I felt it too. I never told her that. I don&#8217;t know why.`;
+          textDialog.value = `I remember Jen telling me about a strange experience she had as a girl. She remembers playing in her room&mdash;in this 90-year-old farmhouse and seeing a teenage girl in strange old clothing watching her with curiosity. She felt excited to have the undivided attention of someone older than her. 
+          <br />
+          <br />She ran to show her mom the girl, but when they returned, she was nowhere. Jen told me that she was so desperate for attention, she began to imagine that the girl was watching her with great interest all of the time, even though she only occasionally saw her.  Making her bed or brushing her teeth was now an event worthy of an audience. Jen named the girl &#8220;Chrissy&#8221; and talked to her constantly. Her parents and teachers just assumed this was an imaginary friend of hers and that she would eventually outgrow it. 
+          <br />
+          <br/>Jen was 11 or 12 when it first occurred to her that Chrissy was a dead person. The feeling of being watched changed after that. She stopped talking to or acknowledging Chrissy altogether. She said she&#8217;s never told anyone about that before, but it&#8217;s part of the reason she doesn&#8217;t like going back home. The other part was her parents. Maybe it was the power of suggestion, but sleeping in her childhood bedroom, I felt it too. I never told her that. I don&#8217;t know why.`;
           break;
         case "5":
           textDialog.value = `I remember waiting for the moment I would do or say something too weird or vulnerable and she would recoil and slink away. Everyone who had ever tried to love me eventually realized that they couldn&#8217;t for reasons I and possibly they will never fully understand.<br>
@@ -534,7 +542,9 @@ export default defineComponent({
           But once the novelty wore off, it was completely demoralizing. She stopped creating and she had frequent night terrors. I told her to just quit and that I could float us both for a little while, but she didn&#8217;t think she would be able to find anything that paid enough to keep up with our rent hike. I told her, &#8220;Let&#8217;s just move then. Nothing is worth you feeling like this.&#8221;  She thought I meant to another apartment in L.A., but when I suggested we leave California and find somewhere out in the country to homestead, it was the first time she looked truly relieved in months.`;
           break;
         case "8":
-          textDialog.value = `Our first year homesteading in Virginia was beautiful and unforgiving. There was joy and heartache and the luxury of boredom. There was powdery mildew and blackberries and toil and chickens. We lived in a doublewide trailer on 10 acres of land that no one wanted. We collected rain water and grew and canned enough vegetables to feed ourselves that winter. It was Jen&#8217;s idea to plant a half acre of sunflowers and zinnias, which not only looked beautiful but was also a decent source of income. People would come and pick their own bouquets and buy some veggies while they were already there. I watched my wife wake back up to herself again. She was tired in a way that was satisfying. She began creating again.`;
+          textDialog.value = `Our first year homesteading in West Virginia was beautiful and unforgiving. There was joy and heartache and the luxury of boredom. There was powdery mildew and blackberries and toil and chickens. We lived in a doublewide trailer on 10 acres of land that no one wanted. We collected rain water and grew and canned enough vegetables to feed ourselves that winter. 
+          <br />
+          <br />It was Jen&#8217;s idea to plant a half acre of sunflowers and zinnias, which not only looked beautiful but was also a decent source of income. People would come and pick their own bouquets and buy some veggies while they were already there. I watched my wife wake back up to herself again. She was tired in a way that was satisfying. She began creating again.`;
           break;
         case "9":
           flipbookDisplay.value = true;
@@ -548,13 +558,15 @@ export default defineComponent({
         case "11":
           textDialog.value = `Jen found a nest of baby rabbits. She knew to leave them alone under normal circumstances, but their mother never returned. The nearest wild rehabilitation was already at capacity, so she bottle fed them every two hours for eight days, only taking breaks when I could relieve her for a nap. We lost one of them, but the others managed to survive long enough to feed themselves. She built them a rabbit hutch in the backyard and frequently brought them inside to play. She cared for them for over a year.<br>
           <br>
-          All it took was one time for me to forget to latch the hutch for a fox to get inside. It was such a small and simple thing. I don&#8217;t even remember what distracted me. We woke up to the sound of their screams. I immediately knew what was happening and told her &#8220;don&#8217;t look&#8221; and that I would take care of it, but she very tenderly gathered them up in an old dress and buried them herself. Then she didn&#8217;t speak to me or leave the bed for three days. I still haven&#8217;t forgiven myself.`;
+          All it took was one time for me to forget to latch the hutch for a fox to get inside. It was such a small and simple thing. I don&#8217;t even remember what distracted me. We woke up to the sound of their screams. I immediately knew what was happening and told her &#8220;don&#8217;t look&#8221; and that I would take care of it, but she very tenderly gathered them up in an old dress and buried them herself. Then she didn&#8217;t speak to me or leave the bed for three days. `;
           break;
         case "12":
           textDialog.value = `The only time I&#8217;ve ever heard Jen sing in nearly ten years of knowing her was secretly. And to the tomatoes. She would make up these silly little songs to encourage them to grow and I hid behind the screen door, straining to hear all the words. Her singing wasn&#8217;t great, but it was just so sweet. I loved it. I wish I had told her that, but I think she probably would have stopped if I had.`;
           break;
         case "13":
-          textDialog.value = `Our second year in Virginia my older sister, Patty, was diagnosed with breast cancer. Emily&#8217;s dad wasn&#8217;t in the picture and Patty didn&#8217;t have the energy to take care of Emily alone while she underwent chemo, so they came to live with us for the summer. I remember how natural Jen was with Emily. She knew how to talk to her without talking down to or over her. There was an ease between them that I couldn&#8217;t fake even though I tried. I felt embarrassed because she was my niece, but in hindsight I think Emily was too scared that her mom might die to notice my awkwardness. I did what I could to distract her with something fun by creating increasingly elaborate scavenger hunts and by helping her direct her first movie on an old camcorder I got at an estate sale. We gave them our bedroom and slept on an air mattress in the living room. I remember Jen whispering while they were sleeping that we should be prepared to adopt Emily if Patty dies. I agreed, but I was terrified.`;
+          textDialog.value = `Our second year in West Virginia my older sister, Patty, was diagnosed with breast cancer. Emily&#8217;s dad wasn&#8217;t in the picture and Patty didn&#8217;t have the energy to take care of Emily alone while she underwent chemo, so they came to live with us for the summer. I remember how natural Jen was with Emily. She knew how to talk to her without talking down to or over her. There was an ease between them that I couldn&#8217;t fake even though I tried. I felt embarrassed because she was my niece, but in hindsight I think Emily was too scared that her mom might die to notice my awkwardness. 
+          <br />
+          <br />I did what I could to distract her with something fun by creating increasingly elaborate scavenger hunts and by helping her direct her first movie on an old camcorder I got at an estate sale. We gave them our bedroom and slept on an air mattress in the living room. I remember Jen whispering while they were sleeping that we should be prepared to adopt Emily if Patty dies. I agreed, but I was terrified.`;
           break;
         case "14":
           soundPlaying.value = sounds.proposalAudio;
@@ -571,7 +583,7 @@ export default defineComponent({
           imageDisplay.value = letterImage;
           break;
         case "19":
-          textDialog.value = `After Emily stayed with us the summer Patty was sick, Jen told me she realized she wanted to have a child. I felt betrayed. I asked her what was so wrong with our life that she felt she needed a kid to fix it. I didn&#8217;t want to get left behind, or worse, for her to realize I wouldn&#8217;t be a good dad. I was so afraid of losing her that I almost did. I&#8217;m not sure she should have stayed with me after that, but I&#8217;m glad that she did.`;
+          textDialog.value = `After Emily stayed with us the summer Patty was sick, Jen told me she realized she wanted to have a child. I felt betrayed. I asked her what was so wrong with our life that she felt she needed a kid to fix it. I didn&#8217;t want to get left behind, or worse, for her to realize I wouldn&#8217;t be a good dad. I was so afraid of losing her that I almost did. Sometimes I wonder if she had left, would she have been happier? At least she'd still be alive.`;
           break;
         case "20":
           soundPlaying.value = sounds.voicemailAudio;
@@ -585,7 +597,7 @@ export default defineComponent({
           textDialog.value = `I found out she was pregnant from the coroner. When was she planning to tell me? Was she going to go through with it? Did she even know?`;
           break;
         case "23":
-          textDialog.value = `I keep growing older but you are always thirty-two. I didn&#8217;t think about it at first, but the gap between us keeps widening. Sometimes I think about a future memory that doesn&#8217;t exist. It&#8217;s very simple. Just a  5-second film reel of lines stretching across your face as you smile at me, silver threading through your hair. You&#8217;re gorgeous.`;
+          textDialog.value = `I keep growing older but you are always thirty-two. I didn&#8217;t think about it at first, but the gap between us just keeps widening. Sometimes I think about a future memory that doesn&#8217;t exist. It&#8217;s very simple. Just a  5-second film reel of lines stretching across your face as you smile at me, silver threading through your hair. You&#8217;re gorgeous.`;
           break;
         default:
           break;
@@ -648,9 +660,12 @@ export default defineComponent({
 
 body {
   color: black;
-  /* background-color: white; */
+  background-color: white;
+  /* background-color: #465a4c; */
   /* background-color: #f3e3b2; */
-  background-color: #8f950b;
+  /* background-color: #8f950b;  */
+  background-color: #6f7502;
+  /* background-color: #5f6501; */
   /* background-color: #3e8b43; */
 }
 .modal-mask {
@@ -673,6 +688,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: scroll;
   z-index: 1000;
 }
 .modal-dim {
@@ -684,10 +700,15 @@ body {
   width: 300px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 640px) {
   .modal-container-large {
     width: 100%;
     height: 100vh;
+  }
+  .modal-body {
+    height: 100%;
+    overflow-y: scroll;
+    padding-bottom: 20px;
   }
   .modal-container-media {
     width: 100%;
@@ -698,9 +719,14 @@ body {
   }
 }
 
-@media only screen and (min-width: 601px) {
+@media only screen and (min-width: 641px) {
   .modal-container-large {
     width: 60%;
+  }
+  .modal-body {
+    height: 100%;
+    overflow-y: scroll;
+    padding-bottom: 20px;
   }
   .modal-container-media {
     width: 80%;
@@ -753,7 +779,6 @@ body {
   margin: 20px 20px;
   padding-top: 10px;
   padding-bottom: 10px;
-  overflow-x: scroll;
 }
 .modal-default-button {
   float: right;
@@ -789,6 +814,10 @@ body {
 h3, h4 {
     font-family: 'Typewriter', 'Courier New', Courier, monospace;
   }
+.mapper-container {
+  width: 100%;
+  height: 100%;
+}
 
 @media only screen and (max-width: 720px) {
   .app-container {
@@ -852,7 +881,7 @@ h3, h4 {
 
 .app-header h3 {
   padding-top: 1vh;
-  padding-bottom: 2px;
+  padding-bottom: 28px;
 }
 
 .app-header h4 {

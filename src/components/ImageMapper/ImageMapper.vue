@@ -4,6 +4,7 @@
       ref="img"
       role="presentation"
       class="img-mapper-img"
+      rel="preload"
       :style="imgStyle"
       :src="src"
       :useMap="`#${mapState.name}`"
