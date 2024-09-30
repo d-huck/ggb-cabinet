@@ -4,7 +4,6 @@
       ref="img"
       role="presentation"
       class="img-mapper-img"
-      rel="preload"
       :style="imgStyle"
       :src="src"
       :useMap="`#${mapState.name}`"
@@ -76,7 +75,6 @@ export default defineComponent({
       if (this.map.areas.length) {
         this.ctx = this.$refs.canvas.getContext('2d');
         this.updateCacheMap();
-        this.isRendered = true;
       }
     }, 50);
   },
@@ -84,7 +82,7 @@ export default defineComponent({
     if (!this.isRendered && this.map.areas.length) {
       this.ctx = this.$refs.canvas.getContext('2d');
       this.updateCacheMap();
-      this.isRendered = true;
+      // this.isRendered = true;
     }
     if (JSON.stringify(this.mapState) === JSON.stringify(this.map)) {
       this.updateCacheMap();
@@ -113,13 +111,13 @@ export default defineComponent({
       if (typeof this[type] === 'function') {
         return this[type](this.$refs.img);
       }
-      return this[type];
+      return this.$refs.img[type];
     },
     getValues(type, measure, name = 'area') {
       const { naturalWidth, naturalHeight, clientWidth, clientHeight } = this.$refs.img;
-
       if (type === 'width') {
-        if (this.responsive) return this.parentWidth;
+        if (this.responsive && this.parentWidth > 0) return this.parentWidth;
+        if (this.responsive) return clientWidth;
         if (this.natural) return naturalWidth;
         if (this.width || name === 'image') return measure;
         return clientWidth;
@@ -141,11 +139,13 @@ export default defineComponent({
       console.log("initialized canvas, imageWidth:", imageWidth)
 
       if (this.width || this.responsive) {
-        this.$refs.img.width = this.getValues('width', imgWidth, 'image');
+        let width = this.getValues('width', imgWidth, 'image');
+        this.$refs.img.width = width;
       }
 
       if (this.height || this.responsive) {
-        this.$refs.img.height = this.getValues('height', imgHeight, 'image');
+        let height = this.getValues('height', imgHeight, 'image');
+        this.$refs.img.height = height;
       }
 
       this.$refs.canvas.width = imageWidth;
@@ -163,7 +163,7 @@ export default defineComponent({
           height: imageHeight,
         });
       }
-
+      this.isRendered = true;
       this.imgRef = this.$refs.img;
       this.renderPrefilledAreas();
     },
@@ -229,8 +229,8 @@ export default defineComponent({
       const scale =
         this.width && this.imgWidth && this.imgWidth > 0 ? this.width / this.imgWidth : 1;
 
-      if (this.responsive && this.parentWidth) {
-        return coords.map(coord => coord / (this.imgRef.naturalWidth / this.parentWidth));
+      if (this.responsive) {
+        return coords.map(coord => coord / (this.$refs.img.naturalWidth / this.$refs.img.clientWidth));
       }
       return coords.map(coord => coord * scale);
     },
