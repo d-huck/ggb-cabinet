@@ -17,13 +17,13 @@
   <Transition name="modal">
     <div v-if="textDialog">
       <div class="modal-wrapper modal-dim" @click="closeTextDialog">
-        <div class="modal-container-large over">
+        <div class="modal-container-large over" @click.stop="doNothing">
           <div class="modal-header">
             <slot name="header">
               <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeTextDialog" />
             </slot>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" >
             <slot name="body"><div class="modal-text" v-html="textDialog"></div></slot>
           </div>
         </div>
@@ -33,7 +33,7 @@
   <Transition name="modal">
     <div v-if="showLockedDrawerDialog">
       <div class="modal-wrapper modal-dim" @click="closeLockedDrawer">
-        <div class="modal-container-large over">
+        <div class="modal-container-large over" @click.stop="doNothing">
           <div class="modal-header">
             <slot name="header">
               <!-- TODO: This is a little ambiguous -->
@@ -62,7 +62,7 @@
   </Transition>
   <Transition name="modal-flipbook">
     <div v-if="flipbookDisplay" class="modal-wrapper modal-dim" @click="closeFlipbook">
-      <div class="modal-container-media">
+      <div class="modal-container-media over" @click.stop="doNothing">
         <div class="modal-header">
           <slot name="header">
             <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeFlipbook" />
@@ -104,7 +104,7 @@
   </Transition>
   <Transition name="modal">
     <div v-if="imageDisplay" class="modal-wrapper modal-dim" @click="closeImage">
-      <div class="modal-container-large">
+      <div class="modal-container-media" @click.stop="doNothing">
         <div class="modal-header">
           <slot name="header">
             <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeImage" />
@@ -124,7 +124,7 @@
   </Transition>
   <Transition name="modal">
     <div v-if="soundPlaying" class="modal-wrapper modal-dim" @click.stop="closeAudio">
-      <div class="modal-container-large">
+      <div class="modal-container-large over" @click.stop="doNothing">
         <div class="modal-header">
           <slot name="header">
             <div class="text-center">
@@ -145,7 +145,7 @@
   </Transition>
   <Transition name="modal">
     <div v-if="videoDisplay" class="modal-wrapper modal-dim" @click="closeVideo">
-      <div class="modal-container-large">
+      <div class="modal-container-media">
         <div class="modal-header">
           <slot name="header">
             <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeVideo" />
@@ -702,7 +702,7 @@ body {
 @media only screen and (max-width: 640px) {
   .modal-container-large {
     width: 100%;
-    height: 100vh;
+    height: 100%;
   }
   .modal-body {
     height: 100%;
@@ -711,7 +711,7 @@ body {
   }
   .modal-container-media {
     width: 100%;
-    height: 100vh;
+    height: 100%;
   }
   .w-50 {
     width: 100%;
@@ -824,9 +824,9 @@ h3, h4 {
     flex-direction: column;
     align-items: center;
     margin: auto;
-    margin-top: 0.5vh;
+    margin-top: 20px;
     width: 98%;
-    height: 100vh;
+    height: 100%;
     justify-items: flex-start;
   }
   h3 {
