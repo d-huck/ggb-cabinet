@@ -226,7 +226,7 @@ import drawerStuckB from './assets/audio/drawer/soundfx-stuck_b.mp3';
 import drawerStuckC from './assets/audio/drawer/soundfx-stuck_c.mp3';
 
 // Cabinet image
-import cabinetImage from './assets/images/cabinet.jpg';
+import cabinetImage from './assets/images/cabinet.webp';
 
 // Letter
 import letterImage from './assets/images/letter.webp';
