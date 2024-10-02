@@ -174,7 +174,6 @@
         :imgWidth="2500"
         :parentWidth="parentWidth"
         :responsive="true"
-        onrendered="handleResize"
         @click="handleImageMapClick"
         v-on:click="handleImageMapClick"
       />
@@ -273,9 +272,8 @@ export default defineComponent({
     onMounted(() => {
       window.addEventListener('resize', handleResize);
     });
-    const parentWidth = ref(800);
+    const parentWidth = ref(container.value?.clientWidth ?? -1);
     const handleResize = () => {
-      console.log("Resizing to", container.value.clientWidth);
       parentWidth.value = container.value.clientWidth;
     };
 
@@ -368,16 +366,17 @@ export default defineComponent({
 
     const closeWelcome = () => {
       loaded.value = true;
+      areasData.value = areas;
       setTimeout(() => {
         // console.log("Start background music playing");
         sounds.backgroundMusic.sound.value.level = MAX_LEVEL;
         sounds.backgroundMusic.play();
       }, 50);
-      setTimeout(() => {
-        // console.log("Setting image map areas");
-        areasData.value = areas;
-        handleResize();
-      }, 100);
+      // setTimeout(() => {
+      //   // console.log("Setting image map areas");
+      //   areasData.value = areas;
+      //   handleResize();
+      // }, 100);
     };
 
     const closeTextDialog = () => {
