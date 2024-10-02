@@ -32,3 +32,8 @@ npm-debug.log*
 /plugins
 /www
 
+# Ignore large assets
+*.mp3
+*.mp4
+*.m4a
+*.webp
