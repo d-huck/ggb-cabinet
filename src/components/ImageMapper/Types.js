@@ -9,7 +9,7 @@ export const ImageMapperDefaultProps = {
   },
   areaKeyName: {
     type: String,
-    default: 'id',
+    default: "id",
   },
   active: {
     type: Boolean,
@@ -21,11 +21,11 @@ export const ImageMapperDefaultProps = {
   },
   fillColor: {
     type: String,
-    default: 'rgba(255, 255, 255, 0.5)',
+    default: "rgba(255, 255, 255, 0.5)",
   },
   strokeColor: {
     type: String,
-    default: 'rgba(0, 0, 0, 0.5)',
+    default: "rgba(0, 0, 0, 0.5)",
   },
   lineWidth: {
     type: Number,
