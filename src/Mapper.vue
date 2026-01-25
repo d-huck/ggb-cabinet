@@ -571,9 +571,8 @@ export default defineComponent({
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
         <br>
-        If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. It's parked at ${address} and I've arranged someone to meet you there on ${date.value}.
+If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. Call this number (${phone}) when you arrive at ${address} and Mikey will meet you there at ${date.value} to let you in the camper. Don&#8217;f be late.
         <br />
-        <br>Call ${phone} when you arrive and they'll let you in. Don&#8217;t be late.<br>
         <br>
         -Henry;`;
         let choice = Math.floor(Math.random() * sounds.drawer.open.length);
