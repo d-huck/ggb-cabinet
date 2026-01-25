@@ -4,12 +4,19 @@
       <div class="modal-container">
         <div class="modal-header">
           <slot name="header">
-            <span>Welcome</span>
-            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeWelcome" />
+            <XMarkIcon
+              class="size-6 text-black-500 float-right cursor-pointer"
+              @click="closeWelcome"
+            />
           </slot>
         </div>
         <div class="modal-body">
-          <slot name="body">This memorial works best on Desktop and contains audio. Headphones are strongly recommended and please make sure your volume is turned up.</slot>
+          <slot name="body"
+            ><h3>Welcome.</h3>
+            This memorial works best on Desktop and contains audio. Headphones
+            are strongly recommended and please make sure your volume is turned
+            up.</slot
+          >
         </div>
       </div>
     </div>
@@ -20,11 +27,16 @@
         <div class="modal-container-large over">
           <div class="modal-header">
             <slot name="header">
-              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeTextDialog" />
+              <XMarkIcon
+                class="size-6 text-black-500 float-right cursor-pointer"
+                @click="closeTextDialog"
+              />
             </slot>
           </div>
           <div class="modal-body">
-            <slot name="body"><div class="modal-text" v-html="textDialog"></div></slot>
+            <slot name="body"
+              ><div class="modal-text" v-html="textDialog"></div
+            ></slot>
           </div>
         </div>
       </div>
@@ -38,22 +50,30 @@
             <slot name="header">
               <!-- TODO: This is a little ambiguous -->
               <span>The date Jen and I were married.</span>
-              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeLockedDrawer" />
+              <XMarkIcon
+                class="size-6 text-black-500 float-right cursor-pointer"
+                @click="closeLockedDrawer"
+              />
             </slot>
           </div>
           <div class="modal-body" @click.stop="doNothing">
             <slot name="body">
               <div class="w-full text-center">
-                <InputMask v-model="lockedCode" class="w-50 text-center" placeholder="99/99/9999" mask="99/99/9999" slotChar="__/__/____" />
+                <InputMask
+                  v-model="lockedCode"
+                  class="w-50 text-center"
+                  placeholder="99/99/9999"
+                  mask="99/99/9999"
+                  slotChar="__/__/____"
+                />
               </div>
             </slot>
           </div>
           <div class="modal-footer" @click.stop="doNothing">
             <slot name="footer">
-              <button
-                class="modal-default-button"
-                @click="submitCode"
-              >Submit</button>
+              <button class="modal-default-button" @click="submitCode">
+                Submit
+              </button>
             </slot>
           </div>
         </div>
@@ -61,41 +81,61 @@
     </div>
   </Transition>
   <Transition name="modal-flipbook">
-    <div v-if="flipbookDisplay" class="modal-wrapper modal-dim" @click="closeFlipbook">
+    <div
+      v-if="flipbookDisplay"
+      class="modal-wrapper modal-dim"
+      @click="closeFlipbook"
+    >
       <div class="modal-container-media">
         <div class="modal-header">
           <slot name="header">
-            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeFlipbook" />
+            <XMarkIcon
+              class="size-6 text-black-500 float-right cursor-pointer"
+              @click="closeFlipbook"
+            />
           </slot>
         </div>
         <div class="modal-body" @click.stop="doNothing">
           <slot name="body">
             <div class="card">
-                <Carousel
-                  :value="postcards"
-                  :numVisible="1"
-                  :numScroll="1"
-                  :responsiveOptions="carouselOptions"
-                >
-                    <template #item="slotProps">
-                        <div class="flip-container border-surface-200 dark:border-surface-700 rounded">
-                            <div class="flex mx-auto cursor-pointer">
-                                <vue-flip active-click width="100%" height="600px" transition="1.0s">
-                                  <template v-slot:front>
-                                    <div class="flip-item w-full flex mx-auto">
-                                      <img :src="slotProps.data.back" class="h-400 rounded mx-auto justify-self-center" />
-                                    </div>
-                                  </template>
-                                  <template v-slot:back>
-                                    <div class="flip-item w-full flex mx-auto">
-                                      <img :src="slotProps.data.front" class="h-400 rounded mx-auto" />
-                                    </div>
-                                  </template>
-                                </vue-flip>
-                            </div>
-                        </div>
-                    </template>
-                </Carousel>
+              <Carousel
+                :value="postcards"
+                :numVisible="1"
+                :numScroll="1"
+                :responsiveOptions="carouselOptions"
+              >
+                <template #item="slotProps">
+                  <div
+                    class="flip-container border-surface-200 dark:border-surface-700 rounded"
+                  >
+                    <div class="flex mx-auto cursor-pointer">
+                      <vue-flip
+                        active-click
+                        width="100%"
+                        height="600px"
+                        transition="1.0s"
+                      >
+                        <template v-slot:front>
+                          <div class="flip-item w-full flex mx-auto">
+                            <img
+                              :src="slotProps.data.back"
+                              class="h-400 rounded mx-auto justify-self-center"
+                            />
+                          </div>
+                        </template>
+                        <template v-slot:back>
+                          <div class="flip-item w-full flex mx-auto">
+                            <img
+                              :src="slotProps.data.front"
+                              class="h-400 rounded mx-auto"
+                            />
+                          </div>
+                        </template>
+                      </vue-flip>
+                    </div>
+                  </div>
+                </template>
+              </Carousel>
             </div>
           </slot>
         </div>
@@ -103,11 +143,18 @@
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="imageDisplay" class="modal-wrapper modal-dim" @click="closeImage">
+    <div
+      v-if="imageDisplay"
+      class="modal-wrapper modal-dim"
+      @click="closeImage"
+    >
       <div class="modal-container-large">
         <div class="modal-header">
           <slot name="header">
-            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeImage" />
+            <XMarkIcon
+              class="size-6 text-black-500 float-right cursor-pointer"
+              @click="closeImage"
+            />
           </slot>
         </div>
         <div class="modal-body">
@@ -123,20 +170,33 @@
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="soundPlaying" class="modal-wrapper modal-dim" @click.stop="closeAudio">
+    <div
+      v-if="soundPlaying"
+      class="modal-wrapper modal-dim"
+      @click.stop="closeAudio"
+    >
       <div class="modal-container-large">
         <div class="modal-header">
           <slot name="header">
             <div class="text-center">
-              <span>{{soundPlaying.label}}</span>
-              <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click.stop="closeAudio" />
+              <span>{{ soundPlaying.label }}</span>
+              <XMarkIcon
+                class="size-6 text-black-500 float-right cursor-pointer"
+                @click.stop="closeAudio"
+              />
             </div>
           </slot>
         </div>
         <div class="modal-body" @click.stop="doNothing">
           <slot name="body">
             <div class="w-full mx-auto">
-              <audio class="mx-auto" controls autoplay :src="soundPlaying.src" preload="auto" />
+              <audio
+                class="mx-auto"
+                controls
+                autoplay
+                :src="soundPlaying.src"
+                preload="auto"
+              />
             </div>
           </slot>
         </div>
@@ -144,11 +204,18 @@
     </div>
   </Transition>
   <Transition name="modal">
-    <div v-if="videoDisplay" class="modal-wrapper modal-dim" @click="closeVideo">
+    <div
+      v-if="videoDisplay"
+      class="modal-wrapper modal-dim"
+      @click="closeVideo"
+    >
       <div class="modal-container-large">
         <div class="modal-header">
           <slot name="header">
-            <XMarkIcon class="size-6 text-black-500 float-right cursor-pointer" @click="closeVideo" />
+            <XMarkIcon
+              class="size-6 text-black-500 float-right cursor-pointer"
+              @click="closeVideo"
+            />
           </slot>
         </div>
         <div class="modal-body" @click.stop="doNothing">
@@ -185,10 +252,16 @@
 const FADE_OUT = 500;
 const FADE_IN = 50;
 const MAX_LEVEL = 0.5;
-import { computed, defineComponent, onMounted, ref, shallowReactive } from "vue";
-import { XMarkIcon } from '@heroicons/vue/24/outline';
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  shallowReactive,
+} from "vue";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 import Carousel from "primevue/carousel";
-import InputMask  from "primevue/inputmask";
+import InputMask from "primevue/inputmask";
 import { VueFlip } from "vue-flip";
 import { useSound } from "@vueuse/sound";
 import ImageMapper from "@/components/ImageMapper/ImageMapper.vue";
@@ -203,50 +276,50 @@ import {
   Img,
   Book,
   Zip,
-} from 'vue-flux';
-import 'vue-flux/style.css';
+} from "vue-flux";
+import "vue-flux/style.css";
 
 // Sounds
-import backgroundMusic from './assets/audio/background_music.m4a';
-import pianoAudio from './assets/audio/just_some_chords.m4a';
-import proposalAudio from './assets/audio/proposal.m4a';
-import voicemailAudio from './assets/audio/voicemail.mp3';
+import backgroundMusic from "./assets/audio/background_music.m4a";
+import pianoAudio from "./assets/audio/just_some_chords.m4a";
+import proposalAudio from "./assets/audio/proposal.m4a";
+import voicemailAudio from "./assets/audio/voicemail.mp3";
 
 // Drawer sounds
-import drawerOpenA from './assets/audio/drawer/soundfx-open_a.mp3';
-import drawerOpenB from './assets/audio/drawer/soundfx-open_b.mp3';
-import drawerOpenC from './assets/audio/drawer/soundfx-open_c.mp3';
+import drawerOpenA from "./assets/audio/drawer/soundfx-open_a.mp3";
+import drawerOpenB from "./assets/audio/drawer/soundfx-open_b.mp3";
+import drawerOpenC from "./assets/audio/drawer/soundfx-open_c.mp3";
 
-import drawerCloseA from './assets/audio/drawer/soundfx-close_a.mp3';
-import drawerCloseB from './assets/audio/drawer/soundfx-close_b.mp3';
-import drawerCloseC from './assets/audio/drawer/soundfx-close_c.mp3';
+import drawerCloseA from "./assets/audio/drawer/soundfx-close_a.mp3";
+import drawerCloseB from "./assets/audio/drawer/soundfx-close_b.mp3";
+import drawerCloseC from "./assets/audio/drawer/soundfx-close_c.mp3";
 
-import drawerStuckA from './assets/audio/drawer/soundfx-stuck_a.mp3';
-import drawerStuckB from './assets/audio/drawer/soundfx-stuck_b.mp3';
-import drawerStuckC from './assets/audio/drawer/soundfx-stuck_c.mp3';
+import drawerStuckA from "./assets/audio/drawer/soundfx-stuck_a.mp3";
+import drawerStuckB from "./assets/audio/drawer/soundfx-stuck_b.mp3";
+import drawerStuckC from "./assets/audio/drawer/soundfx-stuck_c.mp3";
 
 // Cabinet image
-import cabinetImage from './assets/images/cabinet.webp';
+import cabinetImage from "./assets/images/cabinet.webp";
 
 // Letter
-import letterImage from './assets/images/letter.webp';
+import letterImage from "./assets/images/letter.webp";
 
 // Postcards
-import postcard1Front from './assets/images/postcards/postcard-01-front.webp';
-import postcard1Back from './assets/images/postcards/postcard-01-back.webp';
-import postcard2Front from './assets/images/postcards/postcard-02-front.webp';
-import postcard2Back from './assets/images/postcards/postcard-02-back.webp';
-import postcard3Front from './assets/images/postcards/postcard-03-front.webp';
-import postcard3Back from './assets/images/postcards/postcard-03-back.webp';
-import postcard4Front from './assets/images/postcards/postcard-04-front.webp';
-import postcard4Back from './assets/images/postcards/postcard-04-back.webp';
-import postcard5Front from './assets/images/postcards/postcard-05-front.webp';
-import postcard5Back from './assets/images/postcards/postcard-05-back.webp';
+import postcard1Front from "./assets/images/postcards/postcard-01-front.webp";
+import postcard1Back from "./assets/images/postcards/postcard-01-back.webp";
+import postcard2Front from "./assets/images/postcards/postcard-02-front.webp";
+import postcard2Back from "./assets/images/postcards/postcard-02-back.webp";
+import postcard3Front from "./assets/images/postcards/postcard-03-front.webp";
+import postcard3Back from "./assets/images/postcards/postcard-03-back.webp";
+import postcard4Front from "./assets/images/postcards/postcard-04-front.webp";
+import postcard4Back from "./assets/images/postcards/postcard-04-back.webp";
+import postcard5Front from "./assets/images/postcards/postcard-05-front.webp";
+import postcard5Back from "./assets/images/postcards/postcard-05-back.webp";
 
-import phoneVideo from './assets/video/first_date.mp4';
+import phoneVideo from "./assets/video/first_date.mp4";
 
 // Areas
-import areas from './assets/areas.json';
+import areas from "./assets/areas.json";
 
 export default defineComponent({
   components: {
@@ -255,7 +328,7 @@ export default defineComponent({
     InputMask,
     VideoPlayer,
     XMarkIcon,
-    'vue-flip': VueFlip
+    "vue-flip": VueFlip,
   },
   setup() {
     "Mapper";
@@ -264,13 +337,13 @@ export default defineComponent({
     const src = cabinetImage;
     let areasData = ref([]);
     const map = computed(() => ({
-      name: 'my-map',
+      name: "my-map",
       areas: areasData.value,
     }));
     const date = ref(null);
     const container = ref(null);
     onMounted(() => {
-      window.addEventListener('resize', handleResize);
+      window.addEventListener("resize", handleResize);
     });
     const parentWidth = ref(container.value?.clientWidth ?? -1);
     const handleResize = () => {
@@ -289,7 +362,13 @@ export default defineComponent({
       console.log("Background sound play error", id, err);
     };
 
-    let backgroundMusicArgs = useSound(backgroundMusic, { html5: true, loop: true, onloaderror: bkLoadError, onplay: bkPlay, onplayerror: bkPlayError });
+    let backgroundMusicArgs = useSound(backgroundMusic, {
+      html5: true,
+      loop: true,
+      onloaderror: bkLoadError,
+      onplay: bkPlay,
+      onplayerror: bkPlayError,
+    });
     let bgm_pos = 0;
     let drawerOpenAArgs = useSound(drawerOpenA);
     let drawerOpenBArgs = useSound(drawerOpenB);
@@ -307,60 +386,80 @@ export default defineComponent({
         pause: backgroundMusicArgs.pause,
         stop: backgroundMusicArgs.stop,
         seek: backgroundMusicArgs.sound.seek,
-        sound: backgroundMusicArgs.sound
+        sound: backgroundMusicArgs.sound,
       },
       pianoAudio: {
         src: pianoAudio,
-        label: "Just some chords"
+        label: "Just some chords",
       },
       proposalAudio: {
         src: proposalAudio,
-        label: "Proposal"
+        label: "Proposal",
       },
       voicemailAudio: {
         src: voicemailAudio,
-        label: "Please don't be mad"
+        label: "Please don't be mad",
       },
       drawer: {
-        open: [drawerOpenAArgs.play, drawerOpenBArgs.play, drawerOpenCArgs.play],
-        close: [drawerCloseAArgs.play, drawerCloseBArgs.play, drawerCloseCArgs.play],
-        stuck: [drawerStuckAArgs.play, drawerStuckBArgs.play, drawerStuckCArgs.play]
-      }
+        open: [
+          drawerOpenAArgs.play,
+          drawerOpenBArgs.play,
+          drawerOpenCArgs.play,
+        ],
+        close: [
+          drawerCloseAArgs.play,
+          drawerCloseBArgs.play,
+          drawerCloseCArgs.play,
+        ],
+        stuck: [
+          drawerStuckAArgs.play,
+          drawerStuckBArgs.play,
+          drawerStuckCArgs.play,
+        ],
+      },
     };
 
     const textDialog = ref(null);
     const flipbookDisplay = ref(false);
-    const carouselOptions = ref([{
-      breakpoint: '768px',
-      numVisible: 1,
-      numScroll: 1
-    }]);
+    const carouselOptions = ref([
+      {
+        breakpoint: "768px",
+        numVisible: 1,
+        numScroll: 1,
+      },
+    ]);
     const imageDisplay = ref(null);
     const soundPlaying = ref(null);
     const videoDisplay = ref(null);
     const videoOptions = ref({});
     const showLockedDrawerDialog = ref(false);
     const lockedCode = ref("");
-    const postcards = [{
-      front: postcard1Front,
-      back: postcard1Back
-    }, {
-      front: postcard2Front,
-      back: postcard2Back
-    }, {
-      front: postcard3Front,
-      back: postcard3Back
-    }, {
-      front: postcard4Front,
-      back: postcard4Back
-    }, {
-      front: postcard5Front,
-      back: postcard5Back
-    }];
+    const postcards = [
+      {
+        front: postcard1Front,
+        back: postcard1Back,
+      },
+      {
+        front: postcard2Front,
+        back: postcard2Back,
+      },
+      {
+        front: postcard3Front,
+        back: postcard3Back,
+      },
+      {
+        front: postcard4Front,
+        back: postcard4Back,
+      },
+      {
+        front: postcard5Front,
+        back: postcard5Back,
+      },
+    ];
 
     let queryParams = new URLSearchParams("");
-    if (window.location.search && (window.location.search.length > 0)) {
-      let uri = window.location.search.substring(1); 
+    if (window.location.search && window.location.search.length > 0) {
+      let uri = window.location.search.substring(1);
       queryParams = new URLSearchParams(uri);
     }
 
@@ -380,7 +479,7 @@ export default defineComponent({
     };
 
     const closeTextDialog = () => {
-      let choice = Math.floor(Math.random()*sounds.drawer.close.length);
+      let choice = Math.floor(Math.random() * sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       textDialog.value = null;
     };
@@ -390,19 +489,19 @@ export default defineComponent({
     };
 
     const closeFlipbook = () => {
-      let choice = Math.floor(Math.random()*sounds.drawer.close.length);
+      let choice = Math.floor(Math.random() * sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       flipbookDisplay.value = false;
     };
 
     const closeImage = () => {
-      let choice = Math.floor(Math.random()*sounds.drawer.close.length);
+      let choice = Math.floor(Math.random() * sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       imageDisplay.value = null;
     };
 
     const closeAudio = () => {
-      let choice = Math.floor(Math.random()*sounds.drawer.close.length);
+      let choice = Math.floor(Math.random() * sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       soundPlaying.value = null;
       sounds.backgroundMusic.sound.value.fade(0, MAX_LEVEL, FADE_IN);
@@ -412,7 +511,7 @@ export default defineComponent({
     };
 
     const closeVideo = () => {
-      let choice = Math.floor(Math.random()*sounds.drawer.close.length);
+      let choice = Math.floor(Math.random() * sounds.drawer.close.length);
       sounds.drawer.close[choice]();
       videoDisplay.value = null;
       videoOptions.value = {};
@@ -429,66 +528,71 @@ export default defineComponent({
 
     const parseDate = () => {
       console.log("Parsing date");
-        let uri = window.location.search.substring(1); 
-        let params = new URLSearchParams(uri);
-        let dateTime = params.get("d") ?? "";
-        // window.history.replaceState({}, document.title, window.location.pathname);
-        // console.log("params:", params.toString());
-        // console.log("Datetime:", dateTime);
-        if (dateTime.length > 0) {
-          let date_obj = new Date(
-            dateTime.substring(0, 4) + "-" +
-            dateTime.substring(4, 6) + "-" +
-            dateTime.substring(6, 8) + "T" +
-            dateTime.substring(8, 10) + ":" +
-            dateTime.substring(10, 12) + ":00"
-          );
-          let formatted_date = `${date_obj.toLocaleDateString('en-US', {weekday: 'long'})}, ${date_obj.toLocaleDateString('en-US', {month: 'long'})} ${date_obj.getDate()}, ${date_obj.getFullYear()} at ${date_obj.toLocaleTimeString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})}`;
-          console.log("formatted date:", formatted_date);
-          date.value = formatted_date;
-        } else if (!date.value) {
-          date.value = null;
-        }
-        console.log("Date value:", date.value);
-    }
+      let uri = window.location.search.substring(1);
+      let params = new URLSearchParams(uri);
+      let dateTime = params.get("d") ?? "";
+      // window.history.replaceState({}, document.title, window.location.pathname);
+      // console.log("params:", params.toString());
+      // console.log("Datetime:", dateTime);
+      if (dateTime.length > 0) {
+        let date_obj = new Date(
+          dateTime.substring(0, 4) +
+            "-" +
+            dateTime.substring(4, 6) +
+            "-" +
+            dateTime.substring(6, 8) +
+            "T" +
+            dateTime.substring(8, 10) +
+            ":" +
+            dateTime.substring(10, 12) +
+            ":00",
+        );
+        let formatted_date = `${date_obj.toLocaleDateString("en-US", { weekday: "long" })}, ${date_obj.toLocaleDateString("en-US", { month: "long" })} ${date_obj.getDate()}, ${date_obj.getFullYear()} at ${date_obj.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true })}`;
+        console.log("formatted date:", formatted_date);
+        date.value = formatted_date;
+      } else if (!date.value) {
+        date.value = null;
+      }
+      console.log("Date value:", date.value);
+    };
     parseDate();
 
     const submitCode = () => {
       //let lockedCode = lockedCode1.value + "/" + lockedCode2.value + "/" + lockedCode3.value;
-      if (date.value &&
-        (lockedCode.value === "04/15/2015") ||
-        (lockedCode.value === "4/15/2015") ||
-        (lockedCode.value === "04/15/15") ||
-        (lockedCode.value === "4/15/15")
+      if (
+        (date.value && lockedCode.value === "04/15/2015") ||
+        lockedCode.value === "4/15/2015" ||
+        lockedCode.value === "04/15/15" ||
+        lockedCode.value === "4/15/15"
       ) {
         let phone = "270-316-8424";
         let address = "Lost Horizon Cidery Mill, 3770 FM1854, Dale, TX 78616";
-        
+
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
         <br>
-        If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. It's parked at ${address} and I've arranged someone to meet you there on ${date.value}. 
+        If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. It's parked at ${address} and I've arranged someone to meet you there on ${date.value}.
         <br />
         <br>Call ${phone} when you arrive and they'll let you in. Don&#8217;t be late.<br>
         <br>
         -Henry;`;
-        let choice = Math.floor(Math.random()*sounds.drawer.open.length);
+        let choice = Math.floor(Math.random() * sounds.drawer.open.length);
         sounds.drawer.open[choice]();
       } else {
         showLockedDrawerDialog.value = false;
-        let choice = Math.floor(Math.random()*sounds.drawer.stuck.length);
+        let choice = Math.floor(Math.random() * sounds.drawer.stuck.length);
         sounds.drawer.stuck[choice]();
       }
     };
 
     const handleImageMapClick = (area, index, event) => {
       // console.log(area, index);
-      let choice = Math.floor(Math.random()*sounds.drawer.open.length);
+      let choice = Math.floor(Math.random() * sounds.drawer.open.length);
       if (area.name === "10") {
         sounds.drawer.stuck[choice]();
       } else if (area.name) {
         sounds.drawer.open[choice]();
-      } 
+      }
 
       switch (area.name) {
         case "1":
@@ -508,9 +612,9 @@ export default defineComponent({
           bgm_pos = sounds.backgroundMusic.sound.value.seek();
           break;
         case "4":
-          textDialog.value = `I remember Jen telling me about a strange experience she had as a girl. She remembers playing in her room&mdash;in this 90-year-old farmhouse and seeing a teenage girl in strange old clothing watching her with curiosity. She felt excited to have the undivided attention of someone older than her. 
+          textDialog.value = `I remember Jen telling me about a strange experience she had as a girl. She remembers playing in her room&mdash;in this 90-year-old farmhouse and seeing a teenage girl in strange old clothing watching her with curiosity. She felt excited to have the undivided attention of someone older than her.
           <br />
-          <br />She ran to show her mom the girl, but when they returned, she was nowhere. Jen told me that she was so desperate for attention, she began to imagine that the girl was watching her with great interest all of the time, even though she only occasionally saw her.  Making her bed or brushing her teeth was now an event worthy of an audience. Jen named the girl &#8220;Chrissy&#8221; and talked to her constantly. Her parents and teachers just assumed this was an imaginary friend of hers and that she would eventually outgrow it. 
+          <br />She ran to show her mom the girl, but when they returned, she was nowhere. Jen told me that she was so desperate for attention, she began to imagine that the girl was watching her with great interest all of the time, even though she only occasionally saw her.  Making her bed or brushing her teeth was now an event worthy of an audience. Jen named the girl &#8220;Chrissy&#8221; and talked to her constantly. Her parents and teachers just assumed this was an imaginary friend of hers and that she would eventually outgrow it.
           <br />
           <br/>Jen was 11 or 12 when it first occurred to her that Chrissy was a dead person. The feeling of being watched changed after that. She stopped talking to or acknowledging Chrissy altogether. She said she&#8217;s never told anyone about that before, but it&#8217;s part of the reason she doesn&#8217;t like going back home. The other part was her parents. Maybe it was the power of suggestion, but sleeping in her childhood bedroom, I felt it too. I never told her that. I don&#8217;t know why.`;
           break;
@@ -529,10 +633,12 @@ export default defineComponent({
           videoOptions.value = {
             autoplay: true,
             controls: true,
-            sources: [{
-              src: phoneVideo,
-              type: 'video/mp4'
-            }]
+            sources: [
+              {
+                src: phoneVideo,
+                type: "video/mp4",
+              },
+            ],
           };
           break;
         case "7":
@@ -627,7 +733,7 @@ export default defineComponent({
       lockedCode,
       handleImageMapClick,
     };
-  }
+  },
 });
 </script>
 
@@ -683,27 +789,34 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow-y: scroll;
+  overflow-y: hidden;
   z-index: 1000;
 }
 .modal-dim {
   background-color: rgba(0, 0, 0, 0.85);
   transition: opacity 0.3s ease;
 }
-
-.modal-container {
-  width: 300px;
+.modal-body {
+  display: flex;
+  height: 100%;
+  overflow-y: scroll;
+  padding-bottom: 20px;
 }
 
 @media only screen and (max-width: 640px) {
+  .modal-mask {
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
   .modal-container-large {
     width: 100%;
     height: 100vh;
-  }
-  .modal-body {
-    height: 100%;
-    overflow-y: scroll;
-    padding-bottom: 20px;
   }
   .modal-container-media {
     width: 100%;
@@ -715,13 +828,15 @@ body {
 }
 
 @media only screen and (min-width: 641px) {
+  .modal-container {
+    width: 60%;
+    max-height: 80vh;
+  }
   .modal-container-large {
     width: 60%;
-  }
-  .modal-body {
-    height: 100%;
-    overflow-y: scroll;
-    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
   }
   .modal-container-media {
     width: 80%;
@@ -732,15 +847,34 @@ body {
 }
 
 @media only screen and (min-width: 1024px) {
+  .modal-container {
+    width: 40%;
+  }
   .modal-container-media {
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
     width: 60%;
+  }
+
+  .modal-body {
+    display: flex;
+    height: 100%;
+    overflow-y: scroll;
+    padding-bottom: 20px;
   }
   .modal-container-large {
     width: 45%;
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
   }
 }
 
 @media only screen and (min-width: 1600px) {
+  .modal-container {
+    width: 20%;
+  }
   .modal-container-media {
     width: 45%;
   }
@@ -748,7 +882,6 @@ body {
     width: 35%;
   }
 }
-
 
 .modal-container-large {
   position: absolute;
@@ -761,7 +894,7 @@ body {
   margin: auto;
   padding: 20px 30px;
   background-color: #f3e3b2;
-  font-family: 'Typewriter', 'Courier New', Courier, monospace;
+  font-family: "Typewriter", "Courier New", Courier, monospace;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
@@ -774,6 +907,21 @@ body {
   margin: 20px 20px;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.modal-body h3 {
+  text-align: center;
+  font-size: 1em !important;
+  font-weight: normal !important;
+}
+
+.modal-body::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .modal-default-button {
   float: right;
@@ -806,12 +954,29 @@ body {
   transform: scale(1.1);
 }
 
-h3, h4 {
-    font-family: 'Typewriter', 'Courier New', Courier, monospace;
-  }
+h3,
+h4 {
+  font-family: "Typewriter", "Courier New", Courier, monospace;
+}
 .mapper-container {
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mapper-container::-webkit-scrollbar {
+  display: none;
+}
+
+.app-container::-webkit-scrollbar {
+  display: none;
+}
+
+.app-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @media only screen and (max-width: 720px) {
@@ -821,9 +986,9 @@ h3, h4 {
     align-items: center;
     margin: auto;
     margin-top: 0.5vh;
-    width: 98%;
-    height: 100vh;
-    justify-items: flex-start;
+    margin-bottom: 0.5vh;
+    width: 95vw;
+    justify-items: center;
   }
   h3 {
     font-size: 2.5rem !important;
@@ -840,8 +1005,8 @@ h3, h4 {
     justify-items: center;
     align-items: center;
     max-width: 95vh;
-    max-height: 90vw;
-    width: 98vw;
+    max-height: 95 vw;
+    width: 95vw;
     height: 95vh;
     margin: auto;
     margin-top: 2.5vh;
@@ -869,7 +1034,7 @@ h3, h4 {
   margin-top: 2.5vh;
 }
 .app-header h3 {
-  font-family: 'Aston', 'Brush Script MT', cursive;
+  font-family: "Aston", "Brush Script MT", cursive;
   color: #000;
   text-align: center;
 }
@@ -882,7 +1047,7 @@ h3, h4 {
 .app-header h4 {
   padding-top: 0px;
   padding-bottom: 1vh;
-  text-align: center;;
+  text-align: center;
 }
 
 .flip-item {
