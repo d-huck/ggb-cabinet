@@ -11,12 +11,12 @@
           </slot>
         </div>
         <div class="modal-body">
-          <slot name="body"
-            ><h3>Welcome.</h3>
+          <slot name="body">
+            <h3>Welcome.</h3>
             This memorial works best on Desktop and contains audio. Headphones
             are strongly recommended and please make sure your volume is turned
-            up.</slot
-          >
+            up.
+          </slot>
         </div>
       </div>
     </div>
@@ -565,8 +565,8 @@ export default defineComponent({
         lockedCode.value === "04/15/15" ||
         lockedCode.value === "4/15/15"
       ) {
-        let phone = "270-316-8424";
-        let address = "Lost Horizon Cidery Mill, 3770 FM1854, Dale, TX 78616";
+        let phone = "214-738-4206";
+        let address = "9018 Ruland Rd Houston 77055";
 
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
@@ -795,12 +795,6 @@ body {
   background-color: rgba(0, 0, 0, 0.85);
   transition: opacity 0.3s ease;
 }
-.modal-body {
-  display: flex;
-  height: 100%;
-  overflow-y: scroll;
-  padding-bottom: 20px;
-}
 
 @media only screen and (max-width: 640px) {
   .modal-mask {
@@ -856,12 +850,6 @@ body {
     width: 60%;
   }
 
-  .modal-body {
-    display: flex;
-    height: 100%;
-    overflow-y: scroll;
-    padding-bottom: 20px;
-  }
   .modal-container-large {
     width: 45%;
     display: flex;
@@ -906,12 +894,14 @@ body {
   margin: 20px 20px;
   padding-top: 10px;
   padding-bottom: 10px;
+  overflow-y: scroll;
 }
 
 .modal-body h3 {
   text-align: center;
   font-size: 1em !important;
   font-weight: normal !important;
+  margin-bottom: 10px;
 }
 
 .modal-body::-webkit-scrollbar {
@@ -1053,6 +1043,7 @@ h4 {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: auto;
   height: 100%;
 }
 
