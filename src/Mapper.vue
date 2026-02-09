@@ -13,7 +13,7 @@
         <div class="modal-body">
           <slot name="body">
             <h3>Welcome.</h3>
-            This memorial works best on Desktop and contains audio. Headphones
+            This memorial works best on desktop and contains audio. Headphones
             are strongly recommended and please make sure your volume is turned
             up.
           </slot>
@@ -175,7 +175,7 @@
       class="modal-wrapper modal-dim"
       @click.stop="closeAudio"
     >
-      <div class="modal-container-large">
+      <div class="modal-container">
         <div class="modal-header">
           <slot name="header">
             <div class="text-center">
@@ -209,7 +209,7 @@
       class="modal-wrapper modal-dim"
       @click="closeVideo"
     >
-      <div class="modal-container-large">
+      <div class="modal-container-video">
         <div class="modal-header">
           <slot name="header">
             <XMarkIcon
@@ -571,10 +571,10 @@ export default defineComponent({
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
         <br>
-If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. Call this number (${phone}) when you arrive at ${address} and Mikey will meet you there at ${date.value} to let you in the camper. Don&#8217;f be late.
+If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. Call this number (${phone}) when you arrive at ${address}. Park by the entrance off of Longpoint and Mikey will meet you there at ${date.value} to let you in the camper. Don&#8217;t be late.
         <br />
         <br>
-        -Henry;`;
+        -Henry`;
         let choice = Math.floor(Math.random() * sounds.drawer.open.length);
         sounds.drawer.open[choice]();
       } else {
@@ -760,7 +760,6 @@ If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard fro
 
 body {
   color: black;
-  background-color: white;
   /* background-color: #465a4c; */
   /* background-color: #f3e3b2; */
   /* background-color: #8f950b;  */
@@ -796,6 +795,13 @@ body {
   transition: opacity 0.3s ease;
 }
 
+.modal-container-media,
+.modal-container-large,
+.modal-container  {
+  display: flex;
+  flex-direction: column;
+}
+
 @media only screen and (max-width: 640px) {
   .modal-mask {
     justify-content: center;
@@ -804,10 +810,13 @@ body {
   .modal-container {
     width: 100%;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
   }
   .modal-container-large {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100vh;
+  }
+  .modal-container-video{
     width: 100%;
     height: 100vh;
   }
@@ -822,17 +831,23 @@ body {
 
 @media only screen and (min-width: 641px) {
   .modal-container {
-    width: 60%;
+    width: 45%;
     max-height: 80vh;
   }
   .modal-container-large {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
+    min-width: 70%;
+    width: 400px;
     max-height: 60vh;
   }
+  .modal-container-video {
+    width: 505px;
+    max-height: 90vh;
+    height: 820px;
+  }
   .modal-container-media {
-    width: 80%;
+    max-height: 90vh;
+    height: auto;
+    width: 95%;
   }
   .w-50 {
     width: 50%;
@@ -841,32 +856,27 @@ body {
 
 @media only screen and (min-width: 1024px) {
   .modal-container {
-    width: 40%;
+    width: 35%;
   }
   .modal-container-media {
-    max-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    width: 60%;
+    max-width: 980px;
   }
 
   .modal-container-large {
-    width: 45%;
+    min-width: 45%;
+    width: 780px;
     display: flex;
     flex-direction: column;
-    max-height: 60vh;
+    max-height: 90vh;
   }
 }
 
 @media only screen and (min-width: 1600px) {
   .modal-container {
-    width: 20%;
-  }
-  .modal-container-media {
-    width: 45%;
+    width: 32%;
   }
   .modal-container-large {
-    width: 35%;
+    width: 55%;
   }
 }
 
@@ -877,6 +887,7 @@ body {
 
 .modal-container,
 .modal-container-media,
+.modal-container-video,
 .modal-container-large {
   margin: auto;
   padding: 20px 30px;
@@ -1043,7 +1054,6 @@ h4 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
   height: 100%;
 }
 
