@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full flex justify-center items-center">
-    <video ref="videoPlayer" class="video-js" height="600"></video>
+  <div class="w-full flex justify-center items-center video-container">
+    <video ref="videoPlayer" class="video-js video-object" height="720"></video>
   </div>
 </template>
 
