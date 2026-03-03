@@ -565,13 +565,13 @@ export default defineComponent({
         lockedCode.value === "04/15/15" ||
         lockedCode.value === "4/15/15"
       ) {
-        let phone = "214-738-4206";
-        let address = "9018 Ruland Rd Houston 77055";
+        let phone = "832-907-3788";
+        let address = "BottleMark, 9018 Ruland Rd, Unit E";
 
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
         <br>
-If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things. Call this number (${phone}) when you arrive at ${address}. Park by the entrance off of Longpoint and Mikey will meet you there at ${date.value} to let you in the camper. Don&#8217;t be late.
+If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things.  Go to ${address} on ${date.value}. Call Mikey (${phone}) when you arrive to unlock the camper for you. If the gate to enter is closed, then park on Ruland Road and call the number. Don&#8217;t be late.
         <br />
         <br>
         -Henry`;
@@ -797,7 +797,7 @@ body {
 
 .modal-container-media,
 .modal-container-large,
-.modal-container  {
+.modal-container {
   display: flex;
   flex-direction: column;
 }
@@ -816,7 +816,7 @@ body {
     width: 100%;
     height: 100vh;
   }
-  .modal-container-video{
+  .modal-container-video {
     width: 100%;
     height: 100vh;
   }
