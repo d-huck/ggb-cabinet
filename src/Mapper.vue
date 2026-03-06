@@ -246,6 +246,7 @@
       />
     </div>
   </div>
+  <HintsDialog :enabled="loaded" />
 </template>
 
 <script>
@@ -266,6 +267,7 @@ import { VueFlip } from "vue-flip";
 import { useSound } from "@vueuse/sound";
 import ImageMapper from "@/components/ImageMapper/ImageMapper.vue";
 import VideoPlayer from "@/components/VideoPlayer/VideoPlayer.vue";
+import HintsDialog from "@/components/HintsDialog/HintsDialog.vue";
 import {
   VueFlux,
   FluxCaption,
@@ -324,6 +326,7 @@ import areas from "./assets/areas.json";
 export default defineComponent({
   components: {
     Carousel,
+    HintsDialog,
     ImageMapper,
     InputMask,
     VideoPlayer,
@@ -571,7 +574,7 @@ export default defineComponent({
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
         <br>
-If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper that I hope will explain things.  Go to ${address} on ${date.value}. Call Mikey (${phone}) when you arrive to unlock the camper for you. If the gate to enter is closed, then park on Ruland Road and call the number. Don&#8217;t be late.
+If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper trailer that I hope will explain things.  Go to ${address} on ${date.value}. Call Mikey (${phone}) when you arrive to unlock the camper for you. If the gate to enter is closed, then park on Ruland Road and call the number. Don&#8217;t be late.
         <br />
         <br>
         -Henry`;
@@ -1092,4 +1095,5 @@ h4 {
   max-height: 600px;
   height: initial;
 }
+
 </style>
