@@ -28,9 +28,8 @@
             <details>
               <summary>I want to skip to the end. Where do I go for Part 2?</summary>
               <p>
-                Go next to BottleMark, 9018 Ruland Road, Unit E. At your
-                appointment time, call Mikey at 832-907-3788 to let you into
-                Henry's trailer.
+                Go next to BottleMark, 9018 Ruland Road, Unit E. Park on Ruland at the gate. At your
+                appointment time, call Mikey at 832-907-3788 to let you into Henry's trailer.
               </p>
             </details>
           </div>

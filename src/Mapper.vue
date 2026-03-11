@@ -574,7 +574,7 @@ export default defineComponent({
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
         <br>
-If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper trailer that I hope will explain things.  Go to ${address} on ${date.value}. Call Mikey (${phone}) when you arrive to unlock the camper for you. If the gate to enter is closed, then park on Ruland Road and call the number. Don&#8217;t be late.
+If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper trailer that I hope will explain things.  Go to ${address} on ${date.value}. Call Mikey (${phone}) when you arrive to unlock the camper for you. Park on Ruland Road by the gate and call the number. Don&#8217;t be late.
         <br />
         <br>
         -Henry`;
