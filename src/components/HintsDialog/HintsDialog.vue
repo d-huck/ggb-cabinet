@@ -28,8 +28,9 @@
             <details>
               <summary>I want to skip to the end. Where do I go for Part 2?</summary>
               <p>
-                Go next to BottleMark, 9018 Ruland Road, Unit E. Park on Ruland at the gate. At your
-                appointment time, call Mikey at 832-907-3788 to let you into Henry's trailer.
+                Go next to {{ part2Address }}.
+                {{ part2ParkingInfo }}
+                At your appointment time, call Mikey at {{ part2Phone }} to let you into Henry's trailer.
               </p>
             </details>
           </div>
@@ -52,6 +53,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+import { PART2_ADDRESS, PART2_PHONE, PART2_PARKING_INFO } from "@/constants/part2";
 
 export default defineComponent({
   name: "HintsDialog",
@@ -66,6 +68,9 @@ export default defineComponent({
   },
   setup() {
     const showHelpDialog = ref(false);
+    const part2Address = PART2_ADDRESS;
+    const part2Phone = PART2_PHONE;
+    const part2ParkingInfo = PART2_PARKING_INFO;
 
     const openHelpDialog = () => {
       showHelpDialog.value = true;
@@ -81,6 +86,9 @@ export default defineComponent({
 
     return {
       showHelpDialog,
+      part2Address,
+      part2Phone,
+      part2ParkingInfo,
       openHelpDialog,
       closeHelpDialog,
       doNothing,

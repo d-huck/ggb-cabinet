@@ -322,6 +322,11 @@ import phoneVideo from "./assets/video/first_date.mp4";
 
 // Areas
 import areas from "./assets/areas.json";
+import {
+  PART2_ADDRESS,
+  PART2_PHONE,
+  PART2_PARKING_INFO,
+} from "@/constants/part2";
 
 export default defineComponent({
   components: {
@@ -568,13 +573,10 @@ export default defineComponent({
         lockedCode.value === "04/15/15" ||
         lockedCode.value === "4/15/15"
       ) {
-        let phone = "832-907-3788";
-        let address = "BottleMark, 9018 Ruland Rd, Unit E";
-
         showLockedDrawerDialog.value = false;
         textDialog.value = `Emily,<br>
         <br>
-If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper trailer that I hope will explain things.  Go to ${address} on ${date.value}. Call Mikey (${phone}) when you arrive to unlock the camper for you. Park on Ruland Road by the gate and call the number. Don&#8217;t be late.
+If you&#8217;re reading this, then it&#8217;s likely you haven&#8217;t heard from me in a little while. I left something for you in my camper trailer that I hope will explain things.  Go to ${PART2_ADDRESS} on ${date.value}. ${PART2_PARKING_INFO} Call Mikey (${PART2_PHONE}) when you arrive to unlock the camper for you. Don&#8217;t be late.
         <br />
         <br>
         -Henry`;
