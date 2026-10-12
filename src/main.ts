@@ -6,9 +6,9 @@ import Mapper from './Mapper.vue';
 import './index.css';
 
 const app = createApp(Mapper);
-app.use(PrimeVue, {
+app.use(PrimeVue as any, {
   theme: {
     preset: Aura
   }
-} as any);
+});
 app.mount('#app');
