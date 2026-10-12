@@ -10,5 +10,5 @@ app.use(PrimeVue, {
   theme: {
     preset: Aura
   }
-});
+} as any);
 app.mount('#app');
